@@ -1,0 +1,396 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Hermes Agent + Open WebUI Docker 部署指南 - xtualong 的博客</title><meta name=Description content="基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面"><meta property="og:url" content="https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="xtualong 的博客"><meta property="og:title" content="Hermes Agent + Open WebUI Docker 部署指南"><meta property="og:description" content="基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-24T10:00:00+08:00"><meta property="article:modified_time" content="2026-05-24T10:00:00+08:00"><meta property="article:tag" content="Docker"><meta property="article:tag" content="AI"><meta property="article:tag" content="Hermes"><meta property="article:tag" content="Open WebUI"><meta name=twitter:card content="summary"><meta name=twitter:title content="Hermes Agent + Open WebUI Docker 部署指南"><meta name=twitter:description content="基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面"><meta name=application-name content="My cool site"><meta name=apple-mobile-web-app-title content="My cool site"><meta name=referrer content="no-referrer"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/><link rel=prev href=https://xtualong.github.io/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Hermes Agent + Open WebUI Docker 部署指南","inLanguage":"zh-cn","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/xtualong.github.io\/posts\/hermes-agent-\u002b-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97\/"},"genre":"posts","keywords":"Docker, AI, Hermes, Open WebUI","wordcount":1527,"url":"https:\/\/xtualong.github.io\/posts\/hermes-agent-\u002b-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97\/","datePublished":"2026-05-24T10:00:00+08:00","dateModified":"2026-05-24T10:00:00+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"xtualong"},"description":"基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面"}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script>const query=window.matchMedia("(prefers-color-scheme: dark)");function applyTheme(){let e=window.localStorage?.getItem("theme")||"auto",t=e==="dark"||e==="auto"&&query.matches;document.body.setAttribute("theme",t?"dark":"light"),document.body.setAttribute("cfg-theme",e)}applyTheme(),query.addEventListener("change",applyTheme)</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="xtualong 的博客">xtualong 的博客</a></div><div class=menu><div class=menu-inner><span class="menu-item search" id=search-desktop><input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-spin" aria-hidden=true></i>
+</span></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="xtualong 的博客">xtualong 的博客</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Hermes Agent + Open WebUI Docker 部署指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle" aria-hidden=true></i>xtualong</a></span>&nbsp;<span class=post-category>included in <a href=/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/><i class="far fa-folder" aria-hidden=true></i>技术教程</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt" aria-hidden=true></i>&nbsp;<time datetime=2026-05-24>2026-05-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden=true></i>&nbsp;1527 words&nbsp;
+<i class="far fa-clock" aria-hidden=true></i>&nbsp;8 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#目录>目录</a></li><li><a href=#1-背景与架构>1. 背景与架构</a><ul><li><a href=#11-什么是-hermes-agent>1.1 什么是 Hermes Agent</a></li><li><a href=#12-什么是-open-webui>1.2 什么是 Open WebUI</a></li><li><a href=#13-整体架构>1.3 整体架构</a></li><li><a href=#14-docker-网络说明>1.4 Docker 网络说明</a></li></ul></li><li><a href=#2-环境准备>2. 环境准备</a><ul><li><a href=#21-系统要求>2.1 系统要求</a></li><li><a href=#22-安装-docker>2.2 安装 Docker</a></li><li><a href=#23-准备-hermes-agent-数据目录>2.3 准备 Hermes Agent 数据目录</a></li><li><a href=#24-获取-api-密钥>2.4 获取 API 密钥</a></li></ul></li><li><a href=#3-hermes-agent-配置>3. Hermes Agent 配置</a><ul><li><a href=#31-配置文件说明>3.1 配置文件说明</a></li><li><a href=#32-配置-env-文件>3.2 配置 .env 文件</a></li><li><a href=#33-配置-configyaml>3.3 配置 config.yaml</a></li><li><a href=#34-验证-hermes-配置>3.4 验证 Hermes 配置</a></li></ul></li><li><a href=#4-docker-compose-部署>4. Docker Compose 部署</a><ul><li><a href=#41-目录结构>4.1 目录结构</a></li><li><a href=#42-创建目录>4.2 创建目录</a></li><li><a href=#43-docker-compose-配置文件>4.3 Docker Compose 配置文件</a></li><li><a href=#44-配置项速查表>4.4 配置项速查表</a></li><li><a href=#45-启动服务>4.5 启动服务</a></li><li><a href=#46-验证服务>4.6 验证服务</a></li></ul></li><li><a href=#5-open-webui-配置>5. Open WebUI 配置</a><ul><li><a href=#51-首次访问>5.1 首次访问</a></li><li><a href=#52-确认-hermes-连接>5.2 确认 Hermes 连接</a></li><li><a href=#53-开始对话>5.3 开始对话</a></li></ul></li><li><a href=#6-多模型接入>6. 多模型接入</a><ul><li><a href=#61-添加小米-api-直连>6.1 添加小米 API 直连</a></li><li><a href=#62-模型使用建议>6.2 模型使用建议</a></li><li><a href=#63-切换-hermes-内部模型>6.3 切换 Hermes 内部模型</a></li></ul></li><li><a href=#7-常见问题与排查>7. 常见问题与排查</a><ul><li><a href=#71-numpy-兼容性错误>7.1 NumPy 兼容性错误</a></li><li><a href=#72-hermes-循环重启>7.2 Hermes 循环重启</a></li><li><a href=#73-open-webui-连接-hermes-失败>7.3 Open WebUI 连接 Hermes 失败</a></li><li><a href=#74-huggingface-模型下载失败>7.4 HuggingFace 模型下载失败</a></li><li><a href=#75-模型列表为空>7.5 模型列表为空</a></li><li><a href=#76-pve-改-cpu-后无法启动>7.6 PVE 改 CPU 后无法启动</a></li></ul></li><li><a href=#8-运维管理>8. 运维管理</a><ul><li><a href=#81-常用命令>8.1 常用命令</a></li><li><a href=#82-数据备份>8.2 数据备份</a></li><li><a href=#83-日志管理>8.3 日志管理</a></li><li><a href=#84-完整目录结构>8.4 完整目录结构</a></li></ul></li></ul></nav></div></div><div class=content id=content><h1 id=hermes-agent--open-webui-docker-部署指南>Hermes Agent + Open WebUI Docker 部署指南</h1><blockquote><p>基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面，
+以小米 MiMo API + 微信网关为实例完成全流程配置。</p></blockquote><hr><h2 id=目录>目录</h2><ul><li><a href=#1-%e8%83%8c%e6%99%af%e4%b8%8e%e6%9e%b6%e6%9e%84 rel>1. 背景与架构</a></li><li><a href=#2-%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87 rel>2. 环境准备</a></li><li><a href=#3-hermes-agent-%e9%85%8d%e7%bd%ae rel>3. Hermes Agent 配置</a></li><li><a href=#4-docker-compose-%e9%83%a8%e7%bd%b2 rel>4. Docker Compose 部署</a></li><li><a href=#5-open-webui-%e9%85%8d%e7%bd%ae rel>5. Open WebUI 配置</a></li><li><a href=#6-%e5%a4%9a%e6%a8%a1%e5%9e%8b%e6%8e%a5%e5%85%a5 rel>6. 多模型接入</a></li><li><a href=#7-%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e4%b8%8e%e6%8e%92%e6%9f%a5 rel>7. 常见问题与排查</a></li><li><a href=#8-%e8%bf%90%e7%bb%b4%e7%ae%a1%e7%90%86 rel>8. 运维管理</a></li></ul><hr><h2 id=1-背景与架构>1. 背景与架构</h2><h3 id=11-什么是-hermes-agent>1.1 什么是 Hermes Agent</h3><p>Hermes Agent 是 Nous Research 开源的 AI Agent 框架，具备：</p><ul><li><strong>工具调用</strong>：文件操作、代码执行、浏览器控制、网络搜索等</li><li><strong>技能系统</strong>：85+ 内置技能，覆盖开发、研究、创意等领域</li><li><strong>多平台接入</strong>：支持微信、Discord、Telegram 等消息平台</li><li><strong>API 服务器</strong>：内置 OpenAI 兼容 API，可被第三方前端调用</li></ul><h3 id=12-什么是-open-webui>1.2 什么是 Open WebUI</h3><p>Open WebUI 是一个功能丰富的自托管 AI 聊天前端，特点：</p><ul><li>兼容 OpenAI API 格式的后端连接</li><li>多用户管理、聊天记录、知识库</li><li>支持多模型切换和对比</li></ul><h3 id=13-整体架构>1.3 整体架构</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>┌─────────────────────────────────────────────────────┐
+│                    宿主机 (Ubuntu)                     │
+│                                                       │
+│  ┌─────────────────┐      ┌──────────────────────┐   │
+│  │  hermes-gateway  │      │     open-webui        │   │
+│  │                  │◄─────│                       │   │
+│  │  - Hermes Agent  │ API  │  - Web 聊天界面        │   │
+│  │  - API Server    │ 调用  │  - 用户管理           │   │
+│  │  :8642           │      │  :8443                │   │
+│  └───────┬─────────┘      └──────────────────────┘   │
+│          │                                            │
+│          ▼                                            │
+│  ┌─────────────────┐                                  │
+│  │  小米 MiMo API   │                                  │
+│  │  (云端 LLM)      │                                  │
+│  └─────────────────┘                                  │
+└─────────────────────────────────────────────────────┘</code></pre></div><p><strong>通信流程</strong>：</p><ol><li>用户在浏览器访问 Open WebUI（端口 8443）</li><li>Open WebUI 通过 Docker 内部网络调用 Hermes API（端口 8642）</li><li>Hermes Agent 接收请求，调用小米 MiMo API 获取 LLM 响应</li><li>Hermes 根据需要执行工具调用（文件操作、代码执行等），返回最终结果</li></ol><h3 id=14-docker-网络说明>1.4 Docker 网络说明</h3><p>两个容器通过自定义 Docker 网络 <code>hermes-net</code> 互联：</p><ul><li>Open WebUI 通过 <code>http://hermes-gateway:8642/v1</code> 访问 Hermes</li><li><code>hermes-gateway</code> 是容器名，Docker 内部 DNS 自动解析</li><li><strong>无需</strong> <code>host.docker.internal</code>，也不需要暴露端口到宿主机网络</li></ul><hr><h2 id=2-环境准备>2. 环境准备</h2><h3 id=21-系统要求>2.1 系统要求</h3><table><thead><tr><th>项目</th><th>要求</th></tr></thead><tbody><tr><td>操作系统</td><td>Ubuntu 20.04+（推荐 22.04/24.04）</td></tr><tr><td>Docker</td><td>20.10+</td></tr><tr><td>Docker Compose</td><td>v2.0+（<code>docker compose</code> 命令）</td></tr><tr><td>内存</td><td>建议 2GB+</td></tr><tr><td>磁盘</td><td>建议 10GB+ 可用空间</td></tr></tbody></table><h3 id=22-安装-docker>2.2 安装 Docker</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 更新系统</span>
+</span></span><span class=line><span class=cl>sudo apt update <span class=o>&amp;&amp;</span> sudo apt upgrade -y
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装 Docker</span>
+</span></span><span class=line><span class=cl>curl -fsSL https://get.docker.com <span class=p>|</span> sudo sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将当前用户加入 docker 组（免 sudo）</span>
+</span></span><span class=line><span class=cl>sudo usermod -aG docker <span class=nv>$USER</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重新登录后生效，验证</span>
+</span></span><span class=line><span class=cl>docker --version
+</span></span><span class=line><span class=cl>docker compose version</span></span></code></pre></div></div><h3 id=23-准备-hermes-agent-数据目录>2.3 准备 Hermes Agent 数据目录</h3><p>Hermes 的配置和数据存储在宿主机目录中，容器删除后数据不丢失：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建数据目录（与目录结构约定一致）</span>
+</span></span><span class=line><span class=cl>mkdir -p /root/.hermes</span></span></code></pre></div></div><h3 id=24-获取-api-密钥>2.4 获取 API 密钥</h3><p>本教程以小米 MiMo API 为例，你需要：</p><ol><li>注册小米 MiMo 开放平台账号</li><li>获取 API Key（格式类似 <code>tp-xxxxxxxxxxxxxxxxxxxxxxxx</code>）</li><li>确认 Base URL（本例为 <code>https://token-plan-cn.xiaomimimo.com/v1</code>）</li></ol><hr><h2 id=3-hermes-agent-配置>3. Hermes Agent 配置</h2><h3 id=31-配置文件说明>3.1 配置文件说明</h3><p>Hermes 的配置主要涉及两个文件，都位于 <code>HERMES_HOME</code> 目录（默认 <code>/root/.hermes/</code>）：</p><table><thead><tr><th>文件</th><th>作用</th></tr></thead><tbody><tr><td><code>.env</code></td><td>环境变量配置（API 密钥、消息平台凭据等）</td></tr><tr><td><code>config.yaml</code></td><td>运行时配置（模型选择、工具集、Agent 参数等）</td></tr></tbody></table><h3 id=32-配置-env-文件>3.2 配置 .env 文件</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat &gt; /root/.hermes/.env <span class=s>&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s># LLM 提供商配置 - 小米 MiMo
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s>XIAOMI_API_KEY=你的小米API密钥
+</span></span></span><span class=line><span class=cl><span class=s>XIAOMI_BASE_URL=https://token-plan-cn.xiaomimimo.com/v1
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s># 微信网关配置（可选，如需接入微信）
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_ACCOUNT_ID=你的微信账号ID
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_TOKEN=你的微信Token
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_BASE_URL=https://ilinkai.weixin.qq.com
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_CDN_BASE_URL=https://novac2c.cdn.weixin.qq.com/c2c
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_DM_POLICY=pairing
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_ALLOW_ALL_USERS=false
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_ALLOWED_USERS=你的微信用户ID
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_GROUP_POLICY=disabled
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_GROUP_ALLOWED_USERS=
+</span></span></span><span class=line><span class=cl><span class=s>WEIXIN_HOME_CHANNEL=你的微信用户ID
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s># API SERVER（Open WebUI 连接所需）
+</span></span></span><span class=line><span class=cl><span class=s># =============================================================================
+</span></span></span><span class=line><span class=cl><span class=s># 启用内置 API 服务器
+</span></span></span><span class=line><span class=cl><span class=s>API_SERVER_ENABLED=true
+</span></span></span><span class=line><span class=cl><span class=s># API 认证密钥，Open WebUI 连接时需要提供此密钥
+</span></span></span><span class=line><span class=cl><span class=s>API_SERVER_KEY=&lt;your-api-key&gt;
+</span></span></span><span class=line><span class=cl><span class=s># 监听地址：必须为 0.0.0.0 才能让 Docker 容器网络访问
+</span></span></span><span class=line><span class=cl><span class=s># 默认为 127.0.0.1（仅容器内部可访问），这是最常见的坑
+</span></span></span><span class=line><span class=cl><span class=s>API_SERVER_HOST=0.0.0.0
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span></span></span></code></pre></div></div><p><strong>关键配置解释</strong>：</p><ul><li><code>API_SERVER_ENABLED=true</code>：启用内置 API 服务器，使 Open WebUI 可以通过 HTTP 调用</li><li><code>API_SERVER_KEY</code>：认证密钥，两边必须一致</li><li><code>API_SERVER_HOST=0.0.0.0</code>：<strong>必须设置</strong>。默认绑定 <code>127.0.0.1</code>，Docker 容器之间无法通过网络访问</li></ul><h3 id=33-配置-configyaml>3.3 配置 config.yaml</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat &gt; /root/.hermes/config.yaml <span class=s>&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s># 模型配置
+</span></span></span><span class=line><span class=cl><span class=s>model:
+</span></span></span><span class=line><span class=cl><span class=s>  # 默认使用的模型（对应小米 API 中的模型 ID）
+</span></span></span><span class=line><span class=cl><span class=s>  default: mimo-v2.5
+</span></span></span><span class=line><span class=cl><span class=s>  # 推理提供商（auto 会根据环境变量自动检测）
+</span></span></span><span class=line><span class=cl><span class=s>  provider: xiaomi
+</span></span></span><span class=line><span class=cl><span class=s>  # 小米 API 端点
+</span></span></span><span class=line><span class=cl><span class=s>  base_url: https://token-plan-cn.xiaomimimo.com/v1
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># 工具集配置
+</span></span></span><span class=line><span class=cl><span class=s>toolsets:
+</span></span></span><span class=line><span class=cl><span class=s>  - hermes-cli
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># Agent 参数
+</span></span></span><span class=line><span class=cl><span class=s>agent:
+</span></span></span><span class=line><span class=cl><span class=s>  max_turns: 90
+</span></span></span><span class=line><span class=cl><span class=s>  gateway_timeout: 1800
+</span></span></span><span class=line><span class=cl><span class=s>  restart_drain_timeout: 180
+</span></span></span><span class=line><span class=cl><span class=s>  api_max_retries: 3
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span></span></span></code></pre></div></div><p><strong>可用的小米模型</strong>：</p><table><thead><tr><th>模型 ID</th><th>说明</th></tr></thead><tbody><tr><td><code>mimo-v2.5</code></td><td>最新版通用模型（默认推荐）</td></tr><tr><td><code>mimo-v2.5-pro</code></td><td>高性能版本</td></tr><tr><td><code>mimo-v2-pro</code></td><td>上一代专业版</td></tr><tr><td><code>mimo-v2-omni</code></td><td>多模态模型</td></tr><tr><td><code>mimo-v2.5-tts</code></td><td>语音合成</td></tr></tbody></table><h3 id=34-验证-hermes-配置>3.4 验证 Hermes 配置</h3><p>启动 Hermes 容器验证配置是否正确：</p><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 临时启动 Hermes 测试</span>
+</span></span><span class=line><span class=cl>docker run --rm -it <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -v /root/.hermes:/opt/data <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -e <span class=nv>API_SERVER_ENABLED</span><span class=o>=</span><span class=nb>true</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -e <span class=nv>API_SERVER_KEY</span><span class=o>=</span>&lt;your-api-key&gt; <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  nousresearch/hermes-agent
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 如果看到以下内容说明配置成功：</span>
+</span></span><span class=line><span class=cl><span class=c1># Hermes Gateway Starting...</span>
+</span></span><span class=line><span class=cl><span class=c1># ...</span>
+</span></span><span class=line><span class=cl><span class=c1># Welcome to Hermes Agent!</span></span></span></code></pre></div></div><p>按 <code>Ctrl+C</code> 退出测试。</p><hr><h2 id=4-docker-compose-部署>4. Docker Compose 部署</h2><h3 id=41-目录结构>4.1 目录结构</h3><p>建议将 Compose 文件放在统一的管理目录下：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>/etc/docker/
+├── nginx_proxy_manager/      # 已有的 Nginx Proxy Manager
+│   ├── docker-compose.yml
+│   ├── data/
+│   └── letsencrypt/
+└── hermes/                   # Hermes + Open WebUI
+    ├── docker-compose.yml    # Compose 配置文件
+    └── open-webui-data/      # Open WebUI 数据持久化</code></pre></div><h3 id=42-创建目录>4.2 创建目录</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir -p /etc/docker/hermes/open-webui-data</span></span></code></pre></div></div><h3 id=43-docker-compose-配置文件>4.3 Docker Compose 配置文件</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat &gt; /etc/docker/hermes/docker-compose.yml <span class=s>&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s># ============================================================
+</span></span></span><span class=line><span class=cl><span class=s>#  Hermes Agent + Open WebUI  Docker Compose 配置
+</span></span></span><span class=line><span class=cl><span class=s>#  路径: /etc/docker/hermes/docker-compose.yml
+</span></span></span><span class=line><span class=cl><span class=s>#  启动: cd /etc/docker/hermes &amp;&amp; docker compose up -d
+</span></span></span><span class=line><span class=cl><span class=s># ============================================================
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>services:
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>  # ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>  #  Hermes Agent 网关
+</span></span></span><span class=line><span class=cl><span class=s>  #  - 提供 AI Agent 能力（工具调用、文件操作、代码执行等）
+</span></span></span><span class=line><span class=cl><span class=s>  #  - 启动内置 API 服务器，供 Open WebUI 通过 HTTP 调用
+</span></span></span><span class=line><span class=cl><span class=s>  # ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>  hermes-gateway:
+</span></span></span><span class=line><span class=cl><span class=s>    image: nousresearch/hermes-agent
+</span></span></span><span class=line><span class=cl><span class=s>    container_name: hermes-gateway
+</span></span></span><span class=line><span class=cl><span class=s>    restart: always
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    ports:
+</span></span></span><span class=line><span class=cl><span class=s>      # 宿主机 8642 端口映射到容器 8642 端口
+</span></span></span><span class=line><span class=cl><span class=s>      # 主要用于外部调试（如 curl 测试 API）
+</span></span></span><span class=line><span class=cl><span class=s>      # Open WebUI 不需要通过此端口访问（使用 Docker 内部网络）
+</span></span></span><span class=line><span class=cl><span class=s>      - &#34;8642:8642&#34;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    volumes:
+</span></span></span><span class=line><span class=cl><span class=s>      # 将宿主机的 Hermes 数据目录挂载到容器内 /opt/data
+</span></span></span><span class=line><span class=cl><span class=s>      # 所有配置（.env、config.yaml）、会话记录、插件数据都保存在这里
+</span></span></span><span class=line><span class=cl><span class=s>      # 容器删除后数据不丢失
+</span></span></span><span class=line><span class=cl><span class=s>      - /root/.hermes:/opt/data
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    # ── 关键：解决 TTY 问题 ──
+</span></span></span><span class=line><span class=cl><span class=s>    # Hermes CLI 检测到非 TTY 环境会直接退出（&#34;Input is not a terminal&#34;）
+</span></span></span><span class=line><span class=cl><span class=s>    # 需要绕过 tini 初始化进程，直接运行 entrypoint
+</span></span></span><span class=line><span class=cl><span class=s>    entrypoint: [&#34;/opt/hermes/docker/entrypoint.sh&#34;]
+</span></span></span><span class=line><span class=cl><span class=s>    command: [&#34;gateway&#34;, &#34;run&#34;]    # 启动网关模式（消息平台 + API 服务器）
+</span></span></span><span class=line><span class=cl><span class=s>    tty: true                      # 分配伪终端
+</span></span></span><span class=line><span class=cl><span class=s>    stdin_open: true               # 保持标准输入打开
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    environment:
+</span></span></span><span class=line><span class=cl><span class=s>      - API_SERVER_ENABLED=true
+</span></span></span><span class=line><span class=cl><span class=s>      - API_SERVER_KEY=&lt;your-api-key&gt;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    logging:
+</span></span></span><span class=line><span class=cl><span class=s>      driver: json-file
+</span></span></span><span class=line><span class=cl><span class=s>      options:
+</span></span></span><span class=line><span class=cl><span class=s>        max-size: &#34;50m&#34;    # 单个日志文件最大 50MB
+</span></span></span><span class=line><span class=cl><span class=s>        max-file: &#34;3&#34;      # 最多保留 3 个日志文件（自动轮转）
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    networks:
+</span></span></span><span class=line><span class=cl><span class=s>      - hermes-net
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>  # ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>  #  Open WebUI 聊天界面
+</span></span></span><span class=line><span class=cl><span class=s>  #  - 提供 Web 界面供用户与 AI 对话
+</span></span></span><span class=line><span class=cl><span class=s>  #  - 通过 OpenAI 兼容 API 连接到 Hermes Agent
+</span></span></span><span class=line><span class=cl><span class=s>  # ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>  open-webui:
+</span></span></span><span class=line><span class=cl><span class=s>    image: ghcr.io/open-webui/open-webui:main
+</span></span></span><span class=line><span class=cl><span class=s>    container_name: open-webui
+</span></span></span><span class=line><span class=cl><span class=s>    restart: always
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    ports:
+</span></span></span><span class=line><span class=cl><span class=s>      # 浏览器访问地址: http://服务器IP:8443
+</span></span></span><span class=line><span class=cl><span class=s>      - &#34;8443:8080&#34;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    volumes:
+</span></span></span><span class=line><span class=cl><span class=s>      # Open WebUI 数据持久化（用户账户、聊天记录、设置）
+</span></span></span><span class=line><span class=cl><span class=s>      # 使用相对路径 ./open-webui-data，即当前目录下的子目录
+</span></span></span><span class=line><span class=cl><span class=s>      # 宿主机位置: /etc/docker/hermes/open-webui-data
+</span></span></span><span class=line><span class=cl><span class=s>      - ./open-webui-data:/app/backend/data
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    environment:
+</span></span></span><span class=line><span class=cl><span class=s>      # Hermes API 地址
+</span></span></span><span class=line><span class=cl><span class=s>      # hermes-gateway 是 Docker 容器名，通过内部 DNS 解析
+</span></span></span><span class=line><span class=cl><span class=s>      # 必须以 /v1 结尾，否则模型列表无法加载
+</span></span></span><span class=line><span class=cl><span class=s>      - OPENAI_API_BASE_URL=http://hermes-gateway:8642/v1
+</span></span></span><span class=line><span class=cl><span class=s>      # 认证密钥，必须与 Hermes 的 API_SERVER_KEY 完全一致
+</span></span></span><span class=line><span class=cl><span class=s>      - OPENAI_API_KEY=&lt;your-api-key&gt;
+</span></span></span><span class=line><span class=cl><span class=s>      # 国内 HuggingFace 镜像
+</span></span></span><span class=line><span class=cl><span class=s>      # Open WebUI 启动时需要下载嵌入模型（all-MiniLM-L6-v2）
+</span></span></span><span class=line><span class=cl><span class=s>      # 国内无法直接访问 huggingface.co，必须设置镜像
+</span></span></span><span class=line><span class=cl><span class=s>      - HF_ENDPOINT=https://hf-mirror.com
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    depends_on:
+</span></span></span><span class=line><span class=cl><span class=s>      - hermes-gateway
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    logging:
+</span></span></span><span class=line><span class=cl><span class=s>      driver: json-file
+</span></span></span><span class=line><span class=cl><span class=s>      options:
+</span></span></span><span class=line><span class=cl><span class=s>        max-size: &#34;50m&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        max-file: &#34;3&#34;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>    networks:
+</span></span></span><span class=line><span class=cl><span class=s>      - hermes-net
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>#  自定义网络
+</span></span></span><span class=line><span class=cl><span class=s>#  两个容器通过此网络互相通信
+</span></span></span><span class=line><span class=cl><span class=s>#  容器名即 DNS，如 http://hermes-gateway:8642
+</span></span></span><span class=line><span class=cl><span class=s># ──────────────────────────────────────────────────────────
+</span></span></span><span class=line><span class=cl><span class=s>networks:
+</span></span></span><span class=line><span class=cl><span class=s>  hermes-net:
+</span></span></span><span class=line><span class=cl><span class=s>    driver: bridge
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span></span></span></code></pre></div></div><h3 id=44-配置项速查表>4.4 配置项速查表</h3><table><thead><tr><th>配置项</th><th>值</th><th>说明</th></tr></thead><tbody><tr><td>Hermes API 端口</td><td><code>8642</code></td><td>外部调试用，Open WebUI 通过内部网络访问</td></tr><tr><td>Open WebUI 端口</td><td><code>8443</code></td><td>浏览器访问聊天界面</td></tr><tr><td>API 密钥</td><td><code>&lt;your-api-key></code></td><td>两个服务之间的认证凭据</td></tr><tr><td>Hermes 数据目录</td><td><code>/root/.hermes</code></td><td>配置、会话、插件数据</td></tr><tr><td>Open WebUI 数据</td><td><code>./open-webui-data</code></td><td>用户账户、聊天记录</td></tr><tr><td>HuggingFace 镜像</td><td><code>hf-mirror.com</code></td><td>国内环境必需</td></tr></tbody></table><h3 id=45-启动服务>4.5 启动服务</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>cd</span> /etc/docker/hermes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 首次启动</span>
+</span></span><span class=line><span class=cl>docker compose up -d
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看运行状态</span>
+</span></span><span class=line><span class=cl>docker compose ps
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看实时日志（Ctrl+C 退出）</span>
+</span></span><span class=line><span class=cl>docker compose logs -f</span></span></code></pre></div></div><h3 id=46-验证服务>4.6 验证服务</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 检查 Hermes API 是否正常</span>
+</span></span><span class=line><span class=cl>curl http://localhost:8642/health
+</span></span><span class=line><span class=cl><span class=c1># 预期输出: {&#34;status&#34;: &#34;ok&#34;, &#34;platform&#34;: &#34;hermes-agent&#34;}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 从 Open WebUI 容器内测试连接</span>
+</span></span><span class=line><span class=cl>docker <span class=nb>exec</span> open-webui curl -s http://hermes-gateway:8642/health
+</span></span><span class=line><span class=cl><span class=c1># 预期输出: {&#34;status&#34;: &#34;ok&#34;, &#34;platform&#34;: &#34;hermes-agent&#34;}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. 查看可用模型</span>
+</span></span><span class=line><span class=cl>curl -s http://localhost:8642/v1/models <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -H <span class=s2>&#34;Authorization: Bearer &lt;your-api-key&gt;&#34;</span> <span class=p>|</span> python3 -m json.tool</span></span></code></pre></div></div><hr><h2 id=5-open-webui-配置>5. Open WebUI 配置</h2><h3 id=51-首次访问>5.1 首次访问</h3><ol><li>浏览器打开 <code>http://你的服务器IP:8443</code></li><li>首次访问会要求<strong>注册管理员账户</strong></li><li>第一个注册的用户自动成为管理员</li></ol><h3 id=52-确认-hermes-连接>5.2 确认 Hermes 连接</h3><p>注册并登录后，Open WebUI 应该已经自动检测到 Hermes 连接：</p><ul><li>在聊天界面顶部的<strong>模型下拉菜单</strong>中，应该能看到 <code>hermes-agent</code></li><li>如果没有显示，进入 <strong>管理员设置 → 连接 → OpenAI API</strong>，确认连接配置：</li></ul><table><thead><tr><th>字段</th><th>值</th></tr></thead><tbody><tr><td>URL</td><td><code>http://hermes-gateway:8642/v1</code></td></tr><tr><td>密钥</td><td><code>&lt;your-api-key></code></td></tr></tbody></table><h3 id=53-开始对话>5.3 开始对话</h3><ol><li>在模型下拉菜单选择 <code>hermes-agent</code></li><li>输入消息，开始与 Hermes Agent 对话</li><li>Hermes 会根据需要自动调用工具（文件操作、代码执行等）</li></ol><hr><h2 id=6-多模型接入>6. 多模型接入</h2><p>你可以在 Open WebUI 中同时使用 Hermes Agent 和小米直连模型，实现不同场景的最优选择。</p><h3 id=61-添加小米-api-直连>6.1 添加小米 API 直连</h3><p>在 Open WebUI 中进入 <strong>管理员设置 → 连接 → OpenAI API → 添加新连接</strong>：</p><table><thead><tr><th>字段</th><th>值</th></tr></thead><tbody><tr><td>名称</td><td>Xiaomi MiMo</td></tr><tr><td>URL</td><td><code>https://token-plan-cn.xiaomimimo.com/v1</code></td></tr><tr><td>密钥</td><td>你的小米 API Key</td></tr></tbody></table><p>保存后，模型列表中会出现所有小米模型。</p><h3 id=62-模型使用建议>6.2 模型使用建议</h3><table><thead><tr><th>场景</th><th>推荐模型</th><th>说明</th></tr></thead><tbody><tr><td>复杂任务（文件操作、代码执行、多步推理）</td><td><code>hermes-agent</code></td><td>Hermes 调度工具完成复杂工作流</td></tr><tr><td>快速问答</td><td><code>mimo-v2.5</code></td><td>响应更快，无工具调用开销</td></tr><tr><td>高质量生成</td><td><code>mimo-v2.5-pro</code></td><td>性能更强，适合深度分析</td></tr><tr><td>多模态（图文理解）</td><td><code>mimo-v2-omni</code></td><td>支持图片输入</td></tr></tbody></table><h3 id=63-切换-hermes-内部模型>6.3 切换 Hermes 内部模型</h3><p>如果想让 Hermes Agent 使用不同的小米模型执行任务：</p><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 编辑配置文件</span>
+</span></span><span class=line><span class=cl>nano /root/.hermes/config.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 修改 default 字段</span>
+</span></span><span class=line><span class=cl><span class=c1># 例如切换到 mimo-v2.5-pro</span>
+</span></span><span class=line><span class=cl><span class=c1># model:</span>
+</span></span><span class=line><span class=cl><span class=c1>#   default: mimo-v2.5-pro</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重启 Hermes 使配置生效</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /etc/docker/hermes
+</span></span><span class=line><span class=cl>docker compose restart hermes-gateway</span></span></code></pre></div></div><hr><h2 id=7-常见问题与排查>7. 常见问题与排查</h2><h3 id=71-numpy-兼容性错误>7.1 NumPy 兼容性错误</h3><p><strong>错误信息</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>RuntimeError: NumPy was built with baseline optimizations:
+(X86_V2) but your machine doesn&#39;t support: (X86_V2).</code></pre></div><p><strong>原因</strong>：宿主机 CPU 太老，不支持 NumPy 2.x 要求的 SSE4.2 指令集。</p><p><strong>解决方案</strong>（二选一）：</p><p><strong>方案 A：升级虚拟机 CPU 类型（推荐）</strong></p><p>如果在 PVE/ESXi 等虚拟化平台上运行：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># PVE：修改虚拟机配置</span>
+</span></span><span class=line><span class=cl><span class=c1># 将 CPU 类型从默认值改为 host</span>
+</span></span><span class=line><span class=cl>sed -i <span class=s1>&#39;s/cpu:.*/cpu: host/&#39;</span> /etc/pve/qemu-server/&lt;VMID&gt;.conf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重启虚拟机</span>
+</span></span><span class=line><span class=cl>qm reboot &lt;VMID&gt;</span></span></code></pre></div></div><p>修改后验证：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>lscpu <span class=p>|</span> grep -i <span class=s2>&#34;sse\|avx&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># 应该能看到 SSE4.2、AVX2 等指令集</span></span></span></code></pre></div></div><p><strong>方案 B：降级 Open WebUI 版本</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-yaml"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># 在 docker-compose.yml 中将镜像改为旧版本</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>ghcr.io/open-webui/open-webui:0.3.35</span></span></span></code></pre></div></div><h3 id=72-hermes-循环重启>7.2 Hermes 循环重启</h3><p><strong>症状</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>Warning: Input is not a terminal (fd=0).
+Goodbye! ⚕
+hermes-gateway exited with code 0 (restarting)</code></pre></div><p><strong>原因</strong>：Hermes CLI 检测到没有 TTY 终端环境，主动退出。</p><p><strong>解决</strong>：确保 Compose 文件中包含以下配置：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-yaml"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>hermes-gateway</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 绕过 tini，直接运行 entrypoint</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>entrypoint</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/opt/hermes/docker/entrypoint.sh&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;gateway&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;run&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tty</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>          </span><span class=c># 分配伪终端</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>stdin_open</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>   </span><span class=c># 保持标准输入打开</span></span></span></code></pre></div></div><h3 id=73-open-webui-连接-hermes-失败>7.3 Open WebUI 连接 Hermes 失败</h3><p><strong>错误信息</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>ConnectionRefusedError: [Errno 111] Connect call failed (&#39;172.20.0.2&#39;, 8642)</code></pre></div><p><strong>原因</strong>：API 服务器绑定在 <code>127.0.0.1</code>（容器回环地址），Docker 网络无法访问。</p><p><strong>排查步骤</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 检查 API 服务器监听地址</span>
+</span></span><span class=line><span class=cl>docker <span class=nb>exec</span> hermes-gateway cat /proc/net/tcp <span class=p>|</span> grep 21C2
+</span></span><span class=line><span class=cl><span class=c1># 如果看到 0100007F:21C2（127.0.0.1:8642），说明绑定地址错误</span>
+</span></span><span class=line><span class=cl><span class=c1># 如果看到 00000000:21C2（0.0.0.0:8642），说明绑定正确</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 从 Open WebUI 容器测试连通性</span>
+</span></span><span class=line><span class=cl>docker <span class=nb>exec</span> open-webui curl -s http://hermes-gateway:8642/health</span></span></code></pre></div></div><p><strong>解决</strong>：在 <code>/root/.hermes/.env</code> 中添加：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>API_SERVER_HOST</span><span class=o>=</span>0.0.0.0</span></span></code></pre></div></div><p>重启 Hermes：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>cd</span> /etc/docker/hermes
+</span></span><span class=line><span class=cl>docker compose restart hermes-gateway</span></span></code></pre></div></div><h3 id=74-huggingface-模型下载失败>7.4 HuggingFace 模型下载失败</h3><p><strong>错误信息</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>huggingface_hub.errors.LocalEntryNotFoundError:
+&#39;[Errno 101] Network is unreachable&#39;</code></pre></div><p><strong>原因</strong>：国内网络无法直接访问 huggingface.co。</p><p><strong>解决</strong>：在 Compose 文件中设置国内镜像环境变量：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-yaml"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>open-webui</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>HF_ENDPOINT=https://hf-mirror.com</span></span></span></code></pre></div></div><h3 id=75-模型列表为空>7.5 模型列表为空</h3><p><strong>排查</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 确认 Hermes API 正常</span>
+</span></span><span class=line><span class=cl>curl http://localhost:8642/health
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 查看返回的模型列表</span>
+</span></span><span class=line><span class=cl>curl -s http://localhost:8642/v1/models <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -H <span class=s2>&#34;Authorization: Bearer &lt;your-api-key&gt;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. 确认 Open WebUI 连接配置中 URL 以 /v1 结尾</span>
+</span></span><span class=line><span class=cl><span class=c1># 常见错误：http://hermes-gateway:8642（缺少 /v1）</span>
+</span></span><span class=line><span class=cl><span class=c1># 正确写法：http://hermes-gateway:8642/v1</span></span></span></code></pre></div></div><h3 id=76-pve-改-cpu-后无法启动>7.6 PVE 改 CPU 后无法启动</h3><p><strong>症状</strong>：修改虚拟机 CPU 类型为 <code>host</code> 后进入 emergency mode。</p><p><strong>原因</strong>：fstab 中有不存在的磁盘 UUID 导致挂载超时。</p><p><strong>解决</strong>：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 在 emergency shell 中执行</span>
+</span></span><span class=line><span class=cl><span class=c1># 1. 注释掉 fstab 中有问题的行</span>
+</span></span><span class=line><span class=cl>nano /etc/fstab
+</span></span><span class=line><span class=cl><span class=c1># 找到包含不存在 UUID 的行，在行首加 #</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 重启</span>
+</span></span><span class=line><span class=cl>reboot</span></span></code></pre></div></div><hr><h2 id=8-运维管理>8. 运维管理</h2><h3 id=81-常用命令>8.1 常用命令</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>cd</span> /etc/docker/hermes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看容器状态</span>
+</span></span><span class=line><span class=cl>docker compose ps
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看实时日志</span>
+</span></span><span class=line><span class=cl>docker compose logs -f
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看某个服务的日志</span>
+</span></span><span class=line><span class=cl>docker compose logs -f hermes-gateway
+</span></span><span class=line><span class=cl>docker compose logs -f open-webui
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 重启服务</span>
+</span></span><span class=line><span class=cl>docker compose restart
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 停止服务</span>
+</span></span><span class=line><span class=cl>docker compose down
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启动服务</span>
+</span></span><span class=line><span class=cl>docker compose up -d
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更新镜像并重启</span>
+</span></span><span class=line><span class=cl>docker compose pull
+</span></span><span class=line><span class=cl>docker compose up -d
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 进入容器调试</span>
+</span></span><span class=line><span class=cl>docker <span class=nb>exec</span> -it hermes-gateway bash
+</span></span><span class=line><span class=cl>docker <span class=nb>exec</span> -it open-webui bash</span></span></code></pre></div></div><h3 id=82-数据备份>8.2 数据备份</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-bash"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 备份 Hermes 数据</span>
+</span></span><span class=line><span class=cl>tar -czf hermes-backup-<span class=k>$(</span>date +%Y%m%d<span class=k>)</span>.tar.gz /root/.hermes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 备份 Open WebUI 数据</span>
+</span></span><span class=line><span class=cl>tar -czf openwebui-backup-<span class=k>$(</span>date +%Y%m%d<span class=k>)</span>.tar.gz /etc/docker/hermes/open-webui-data
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 完整备份</span>
+</span></span><span class=line><span class=cl>tar -czf full-backup-<span class=k>$(</span>date +%Y%m%d<span class=k>)</span>.tar.gz <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  /root/.hermes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  /etc/docker/hermes</span></span></code></pre></div></div><h3 id=83-日志管理>8.3 日志管理</h3><p>Compose 文件已配置日志轮转（每个容器最多 3 个 50MB 日志文件），无需手动清理。</p><p>如需调整：</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-yaml"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>logging</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>driver</span><span class=p>:</span><span class=w> </span><span class=l>json-file</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>options</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>max-size</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;100m&#34;</span><span class=w>   </span><span class=c># 改大单文件上限</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>max-file</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;5&#34;</span><span class=w>      </span><span class=c># 增加保留数量</span></span></span></code></pre></div></div><h3 id=84-完整目录结构>8.4 完整目录结构</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>/etc/docker/hermes/
+├── docker-compose.yml       # Compose 配置
+└── open-webui-data/         # Open WebUI 数据
+
+/root/.hermes/
+├── .env                     # 环境变量（API 密钥等）
+├── config.yaml              # Hermes 运行时配置
+├── skills/                  # 技能数据
+├── sessions/                # 会话记录
+├── logs/                    # 运行日志
+├── memories/                # Agent 记忆
+├── workspace/               # 工作空间
+└── ...</code></pre></div><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy" aria-hidden=true></i></span></div><pre tabindex=0><code>
+这份教程涵盖了我们部署过程中遇到的所有关键问题和解决方案，其他人在 PVE 环境下部署时可以直接参考。</code></pre></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2026-05-24</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on X" data-sharer=x data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南" data-hashtags="Docker,AI,Hermes,Open WebUI"><i class="fab fa-x-twitter" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Threads" data-sharer=threads data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南"><i class="fab fa-threads" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-hashtag=Docker><i class="fab fa-facebook-square" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南"><i class="fab fa-hacker-news" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@16.9.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南"><i class="fab fa-weibo" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Diaspora" data-sharer=diaspora data-url=https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/ data-title="Hermes Agent + Open WebUI Docker 部署指南" data-description="基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面"><i class="fab fa-diaspora" aria-hidden=true></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fxtualong.github.io%2fposts%2fhermes-agent-%2b-open-webui-docker-%25E9%2583%25A8%25E7%25BD%25B2%25E6%258C%2587%25E5%258D%2597%2f&amp;text=Hermes%20Agent%20%2b%20Open%20WebUI%20Docker%20%e9%83%a8%e7%bd%b2%e6%8c%87%e5%8d%97" target=_blank title="Share on Telegram"><i class="fab fa-telegram" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags" aria-hidden=true></i>&nbsp;<a href=/tags/docker/>Docker</a>,&nbsp;<a href=/tags/ai/>AI</a>,&nbsp;<a href=/tags/hermes/>Hermes</a>,&nbsp;<a href=/tags/open-webui/>Open WebUI</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/ class=prev rel=prev title="小米路由器 OpenWrt 跨网段路由转发教程"><i class="fas fa-angle-left" aria-hidden=true></i>小米路由器 OpenWrt 跨网段路由转发教程</a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.147.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright" aria-hidden=true></i><span itemprop=copyrightYear>2024 - 2026</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>xtualong</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up" aria-hidden=true></i></a></div><div id=fixed-buttons-hidden><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment" aria-hidden=true></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css><script src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js></script><script src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js></script><script src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js></script><script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js></script><script>window.config={comment:{},lightgallery:!0,search:{highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30}}</script><script src=/js/theme.js></script></body></html>

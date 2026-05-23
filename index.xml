@@ -1,8 +1,113 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>xtualong 的博客</title><link>https://xtualong.github.io/</link><description>分享技术与生活的个人博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 24 May 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://xtualong.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>小米路由器 OpenWrt 跨网段路由转发教程</title><link>https://xtualong.github.io/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 17 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/</guid><description>小米路由器 OpenWrt 跨网段完整路由转发教程 前言 场景描述 在家庭有线网络中，主路由下级接入了一台小米路由器（以BE6500为例），该路由器开启了 WiFi。需要让上级有线网络中的 PC 与 WiFi 下的笔记本能够互相通讯。
-网络拓扑 主路由 (10.10.10.1) │ LAN: 10.10.10.x │ ├── PC (有线, 10.10.10.x) │ └── 小米路由器 WAN (10.10.10.101) │ LAN: 192.168.1.x │ └── 笔记本 (WiFi, 192.168.1.151) 前提条件 小米路由器已获取 SSH 权限（未获取请参考下方教程） 笔记本已连接到小米路由器的 WiFi 实现目标 PC 与笔记本之间需要双向通讯 不希望逐个端口做端口映射 第一步：开启小米路由器 SSH 访问 参考来源：小米路由器 BE6500 解锁SSH教程
-1.1 下载所需工具与固件 小米路由器 BE6500 固件 1.0.29 版本 SSH 工具：Windows 使用 PuTTY，MacOS 使用 Termius 注意： 固件版本必须是 1.0.29。如果不是，请使用小米路由器修复工具进行固件降级，降级教程参考上述视频。
-1.2 获取 STOK 码 浏览器登录小米路由器后台管理页面（默认 http://192.</description></item><item><title>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</title><link>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</link><pubDate>Sun, 10 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</guid><description>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程 适用场景：Ubuntu 24.04 LTS 服务器，官方仓库尚未推送安全补丁，需要手动安装主线内核以修复高危漏洞。
-最终结果：从 6.8.0-111-generic 升级至 7.0.0-15-generic，成功修复 CVE-2026-31431 漏洞。
-一、背景：为什么需要升级内核 1.1 漏洞概述 2026 年 4 月 29 日，安全厂商 Theori 公开披露了 Linux 内核高危漏洞 CVE-2026-31431（代号 Copy Fail）：
-属性 详情 CVE 编号 CVE-2026-31431 CVSS 评分 9.8（严重） 漏洞类型 本地权限提升（Local Privilege Escalation） 影响范围 2017 年 8 月至 2026 年 3 月之间的所有 Linux 内核 不受影响的最低版本 内核主线 7.0+、稳定版 6.18.22+、稳定版 6.19.12+ 1.2 漏洞原理（简化说明） 漏洞存在于 Linux 内核加密子系统的 authencesn 模块中。攻击者通过以下方式利用：
-创建 AF_ALG 套接字（内核提供的加密算法接口） 结合 splice() 系统调用（用于高效数据传输） 将目标文件的页缓存（Page Cache）引用暴露在可写的散列表中 实现对 setuid 程序（如 /usr/bin/su）页缓存的 4 字节越界写入 将普通用户提升为 root 关键特征：</description></item><item><title>First_post</title><link>https://xtualong.github.io/posts/first_post/</link><pubDate>Wed, 07 Aug 2024 18:47:05 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/first_post/</guid><description></description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>xtualong 的博客</title><link>https://xtualong.github.io/</link><description>分享技术与生活的个人博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 24 May 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://xtualong.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Hermes Agent + Open WebUI Docker 部署指南</title><link>https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</link><pubDate>Sun, 24 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</guid><description><![CDATA[<h1 id="hermes-agent--open-webui-docker-部署指南">Hermes Agent + Open WebUI Docker 部署指南</h1>
+<blockquote>
+<p>基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面，
+以小米 MiMo API + 微信网关为实例完成全流程配置。</p></blockquote>
+<hr>
+<h2 id="目录">目录</h2>
+<ul>
+<li><a href="#1-%e8%83%8c%e6%99%af%e4%b8%8e%e6%9e%b6%e6%9e%84" rel="">1. 背景与架构</a></li>
+<li><a href="#2-%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87" rel="">2. 环境准备</a></li>
+<li><a href="#3-hermes-agent-%e9%85%8d%e7%bd%ae" rel="">3. Hermes Agent 配置</a></li>
+<li><a href="#4-docker-compose-%e9%83%a8%e7%bd%b2" rel="">4. Docker Compose 部署</a></li>
+<li><a href="#5-open-webui-%e9%85%8d%e7%bd%ae" rel="">5. Open WebUI 配置</a></li>
+<li><a href="#6-%e5%a4%9a%e6%a8%a1%e5%9e%8b%e6%8e%a5%e5%85%a5" rel="">6. 多模型接入</a></li>
+<li><a href="#7-%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e4%b8%8e%e6%8e%92%e6%9f%a5" rel="">7. 常见问题与排查</a></li>
+<li><a href="#8-%e8%bf%90%e7%bb%b4%e7%ae%a1%e7%90%86" rel="">8. 运维管理</a></li>
+</ul>
+<hr>
+<h2 id="1-背景与架构">1. 背景与架构</h2>
+<h3 id="11-什么是-hermes-agent">1.1 什么是 Hermes Agent</h3>
+<p>Hermes Agent 是 Nous Research 开源的 AI Agent 框架，具备：</p>
+<ul>
+<li><strong>工具调用</strong>：文件操作、代码执行、浏览器控制、网络搜索等</li>
+<li><strong>技能系统</strong>：85+ 内置技能，覆盖开发、研究、创意等领域</li>
+<li><strong>多平台接入</strong>：支持微信、Discord、Telegram 等消息平台</li>
+<li><strong>API 服务器</strong>：内置 OpenAI 兼容 API，可被第三方前端调用</li>
+</ul>
+<h3 id="12-什么是-open-webui">1.2 什么是 Open WebUI</h3>
+<p>Open WebUI 是一个功能丰富的自托管 AI 聊天前端，特点：</p>]]></description></item><item><title>小米路由器 OpenWrt 跨网段路由转发教程</title><link>https://xtualong.github.io/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/</link><pubDate>Sun, 17 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-openwrt-%E8%B7%A8%E7%BD%91%E6%AE%B5%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E6%95%99%E7%A8%8B/</guid><description><![CDATA[<h1 id="小米路由器-openwrt-跨网段完整路由转发教程">小米路由器 OpenWrt 跨网段完整路由转发教程</h1>
+<h2 id="前言">前言</h2>
+<h3 id="场景描述">场景描述</h3>
+<p>在家庭有线网络中，主路由下级接入了一台小米路由器（以BE6500为例），该路由器开启了 WiFi。需要让上级有线网络中的 PC 与 WiFi 下的笔记本能够互相通讯。</p>
+<h3 id="网络拓扑">网络拓扑</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>主路由 (10.10.10.1)
+    │  LAN: 10.10.10.x
+    │
+    ├── PC (有线, 10.10.10.x)
+    │
+    └── 小米路由器 WAN (10.10.10.101)
+         │  LAN: 192.168.1.x
+         │
+         └── 笔记本 (WiFi, 192.168.1.151)</code></pre></div>
+<h3 id="前提条件">前提条件</h3>
+<ul>
+<li>小米路由器已获取 SSH 权限（未获取请参考下方教程）</li>
+<li>笔记本已连接到小米路由器的 WiFi</li>
+</ul>
+<h3 id="实现目标">实现目标</h3>
+<ul>
+<li>PC 与笔记本之间需要双向通讯</li>
+<li>不希望逐个端口做端口映射</li>
+</ul>
+<hr>
+<h2 id="第一步开启小米路由器-ssh-访问">第一步：开启小米路由器 SSH 访问</h2>
+<blockquote>
+<p>参考来源：<a href="https://youtu.be/iZNAhoIsJJ4" target="_blank" rel="noopener noreffer ">小米路由器 BE6500 解锁SSH教程</a></p></blockquote>
+<h3 id="11-下载所需工具与固件">1.1 下载所需工具与固件</h3>
+<ul>
+<li>小米路由器 BE6500 固件 <strong>1.0.29</strong> 版本</li>
+<li>SSH 工具：Windows 使用 <a href="https://www.putty.org/" target="_blank" rel="noopener noreffer ">PuTTY</a>，MacOS 使用 <a href="https://termius.com/" target="_blank" rel="noopener noreffer ">Termius</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong> 固件版本必须是 1.0.29。如果不是，请使用小米路由器修复工具进行固件降级，降级教程参考上述视频。</p>]]></description></item><item><title>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</title><link>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</link><pubDate>Sun, 10 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</guid><description><![CDATA[<h1 id="ubuntu-2404-手动升级-linux-内核至-70-完整教程">Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</h1>
+<blockquote>
+<p><strong>适用场景</strong>：Ubuntu 24.04 LTS 服务器，官方仓库尚未推送安全补丁，需要手动安装主线内核以修复高危漏洞。</p>
+<p><strong>最终结果</strong>：从 6.8.0-111-generic 升级至 7.0.0-15-generic，成功修复 CVE-2026-31431 漏洞。</p></blockquote>
+<h2 id="一背景为什么需要升级内核">一、背景：为什么需要升级内核</h2>
+<h3 id="11-漏洞概述">1.1 漏洞概述</h3>
+<p>2026 年 4 月 29 日，安全厂商 Theori 公开披露了 Linux 内核高危漏洞 <strong>CVE-2026-31431</strong>（代号 <strong>Copy Fail</strong>）：</p>
+<table>
+  <thead>
+      <tr>
+          <th>属性</th>
+          <th>详情</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>CVE 编号</td>
+          <td>CVE-2026-31431</td>
+      </tr>
+      <tr>
+          <td>CVSS 评分</td>
+          <td><strong>9.8（严重）</strong></td>
+      </tr>
+      <tr>
+          <td>漏洞类型</td>
+          <td>本地权限提升（Local Privilege Escalation）</td>
+      </tr>
+      <tr>
+          <td>影响范围</td>
+          <td>2017 年 8 月至 2026 年 3 月之间的所有 Linux 内核</td>
+      </tr>
+      <tr>
+          <td>不受影响的最低版本</td>
+          <td>内核主线 7.0+、稳定版 6.18.22+、稳定版 6.19.12+</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="12-漏洞原理简化说明">1.2 漏洞原理（简化说明）</h3>
+<p>漏洞存在于 Linux 内核加密子系统的 <code>authencesn</code> 模块中。攻击者通过以下方式利用：</p>
+<ol>
+<li>创建 <strong>AF_ALG 套接字</strong>（内核提供的加密算法接口）</li>
+<li>结合 <strong>splice() 系统调用</strong>（用于高效数据传输）</li>
+<li>将目标文件的<strong>页缓存（Page Cache）引用</strong>暴露在可写的散列表中</li>
+<li>实现对 <strong>setuid 程序</strong>（如 <code>/usr/bin/su</code>）页缓存的 4 字节越界写入</li>
+<li>将普通用户提升为 <strong>root</strong></li>
+</ol>
+<p><strong>关键特征</strong>：</p>]]></description></item><item><title>First_post</title><link>https://xtualong.github.io/posts/first_post/</link><pubDate>Wed, 07 Aug 2024 18:47:05 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/first_post/</guid><description></description></item></channel></rss>

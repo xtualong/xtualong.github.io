@@ -1,5 +1,47 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Ubuntu - Tag - xtualong 的博客</title><link>https://xtualong.github.io/tags/ubuntu/</link><description>Ubuntu - Tag - xtualong 的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 10 May 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://xtualong.github.io/tags/ubuntu/" rel="self" type="application/rss+xml"/><item><title>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</title><link>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</link><pubDate>Sun, 10 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</guid><description>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程 适用场景：Ubuntu 24.04 LTS 服务器，官方仓库尚未推送安全补丁，需要手动安装主线内核以修复高危漏洞。
-最终结果：从 6.8.0-111-generic 升级至 7.0.0-15-generic，成功修复 CVE-2026-31431 漏洞。
-一、背景：为什么需要升级内核 1.1 漏洞概述 2026 年 4 月 29 日，安全厂商 Theori 公开披露了 Linux 内核高危漏洞 CVE-2026-31431（代号 Copy Fail）：
-属性 详情 CVE 编号 CVE-2026-31431 CVSS 评分 9.8（严重） 漏洞类型 本地权限提升（Local Privilege Escalation） 影响范围 2017 年 8 月至 2026 年 3 月之间的所有 Linux 内核 不受影响的最低版本 内核主线 7.0+、稳定版 6.18.22+、稳定版 6.19.12+ 1.2 漏洞原理（简化说明） 漏洞存在于 Linux 内核加密子系统的 authencesn 模块中。攻击者通过以下方式利用：
-创建 AF_ALG 套接字（内核提供的加密算法接口） 结合 splice() 系统调用（用于高效数据传输） 将目标文件的页缓存（Page Cache）引用暴露在可写的散列表中 实现对 setuid 程序（如 /usr/bin/su）页缓存的 4 字节越界写入 将普通用户提升为 root 关键特征：</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Ubuntu - Tag - xtualong 的博客</title><link>https://xtualong.github.io/tags/ubuntu/</link><description>Ubuntu - Tag - xtualong 的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 10 May 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://xtualong.github.io/tags/ubuntu/" rel="self" type="application/rss+xml"/><item><title>Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</title><link>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</link><pubDate>Sun, 10 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://xtualong.github.io/posts/ubuntu-24.04-%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7-linux-%E5%86%85%E6%A0%B8%E8%87%B3-7/</guid><description><![CDATA[<h1 id="ubuntu-2404-手动升级-linux-内核至-70-完整教程">Ubuntu 24.04 手动升级 Linux 内核至 7.0 完整教程</h1>
+<blockquote>
+<p><strong>适用场景</strong>：Ubuntu 24.04 LTS 服务器，官方仓库尚未推送安全补丁，需要手动安装主线内核以修复高危漏洞。</p>
+<p><strong>最终结果</strong>：从 6.8.0-111-generic 升级至 7.0.0-15-generic，成功修复 CVE-2026-31431 漏洞。</p></blockquote>
+<h2 id="一背景为什么需要升级内核">一、背景：为什么需要升级内核</h2>
+<h3 id="11-漏洞概述">1.1 漏洞概述</h3>
+<p>2026 年 4 月 29 日，安全厂商 Theori 公开披露了 Linux 内核高危漏洞 <strong>CVE-2026-31431</strong>（代号 <strong>Copy Fail</strong>）：</p>
+<table>
+  <thead>
+      <tr>
+          <th>属性</th>
+          <th>详情</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>CVE 编号</td>
+          <td>CVE-2026-31431</td>
+      </tr>
+      <tr>
+          <td>CVSS 评分</td>
+          <td><strong>9.8（严重）</strong></td>
+      </tr>
+      <tr>
+          <td>漏洞类型</td>
+          <td>本地权限提升（Local Privilege Escalation）</td>
+      </tr>
+      <tr>
+          <td>影响范围</td>
+          <td>2017 年 8 月至 2026 年 3 月之间的所有 Linux 内核</td>
+      </tr>
+      <tr>
+          <td>不受影响的最低版本</td>
+          <td>内核主线 7.0+、稳定版 6.18.22+、稳定版 6.19.12+</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="12-漏洞原理简化说明">1.2 漏洞原理（简化说明）</h3>
+<p>漏洞存在于 Linux 内核加密子系统的 <code>authencesn</code> 模块中。攻击者通过以下方式利用：</p>
+<ol>
+<li>创建 <strong>AF_ALG 套接字</strong>（内核提供的加密算法接口）</li>
+<li>结合 <strong>splice() 系统调用</strong>（用于高效数据传输）</li>
+<li>将目标文件的<strong>页缓存（Page Cache）引用</strong>暴露在可写的散列表中</li>
+<li>实现对 <strong>setuid 程序</strong>（如 <code>/usr/bin/su</code>）页缓存的 4 字节越界写入</li>
+<li>将普通用户提升为 <strong>root</strong></li>
+</ol>
+<p><strong>关键特征</strong>：</p>]]></description></item></channel></rss>
