@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>贪吃蛇</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: #fff;
+      padding: 10px;
+    }
+    h1 { margin-bottom: 8px; font-size: 22px; }
+    #info { margin-bottom: 10px; font-size: 13px; opacity: 0.8; }
+    canvas {
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+    #controls { margin-top: 12px; display: flex; gap: 15px; align-items: center; }
+    button {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+    button:hover { background: rgba(255,255,255,0.3); }
+    #message { margin-top: 10px; font-size: 16px; font-weight: bold; min-height: 22px; }
+    #score { font-size: 14px; opacity: 0.9; }
+    .mobile-controls {
+      display: none;
+      margin-top: 12px;
+      gap: 4px;
+    }
+    .mobile-controls button {
+      width: 54px; height: 54px; font-size: 22px;
+      padding: 0; display: flex; align-items: center; justify-content: center;
+      border-radius: 12px;
+    }
+    .mobile-row { display: flex; gap: 4px; justify-content: center; }
+    @media (max-width: 600px) {
+      .mobile-controls { display: flex; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🐍 贪吃蛇</h1>
+  <div id="info">方向键 / WASD 控制方向，吃掉食物得分！</div>
+  <canvas id="game"></canvas>
+  <div id="controls">
+    <button onclick="resetGame()">🔄 重新开始</button>
+    <button onclick="togglePause()">⏸ 暂停</button>
+    <span id="score">得分: 0</span>
+  </div>
+  <div id="message"></div>
+  <div class="mobile-controls">
+    <div class="mobile-row"><button onclick="setDir(0,-1)">⬆</button></div>
+    <div class="mobile-row">
+      <button onclick="setDir(-1,0)">⬅</button>
+      <button onclick="setDir(0,1)">⬇</button>
+      <button onclick="setDir(1,0)">➡</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const message = document.getElementById('message');
+    const scoreEl = document.getElementById('score');
+
+    const GRID = 20;
+    const COLS = 20;
+    const ROWS = 20;
+    canvas.width = GRID * COLS;
+    canvas.height = GRID * ROWS;
+
+    let snake, dir, nextDir, food, score, gameOver, paused, timer;
+
+    function resetGame() {
+      snake = [[10, 10], [10, 11], [10, 12]];
+      dir = [0, -1];
+      nextDir = [0, -1];
+      score = 0;
+      gameOver = false;
+      paused = false;
+      message.textContent = '';
+      scoreEl.textContent = '得分: 0';
+      placeFood();
+      if (timer) clearInterval(timer);
+      timer = setInterval(tick, 120);
+      draw();
+    }
+
+    function placeFood() {
+      const empty = [];
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
+          if (!snake.some(s => s[0] === r && s[1] === c))
+            empty.push([r, c]);
+      food = empty[Math.floor(Math.random() * empty.length)];
+    }
+
+    function tick() {
+      if (gameOver || paused) return;
+      dir = nextDir;
+      const head = [snake[0][0] + dir[1], snake[0][1] + dir[0]];
+
+      // Wall collision
+      if (head[0] < 0 || head[0] >= ROWS || head[1] < 0 || head[1] >= COLS) {
+        endGame(); return;
+      }
+      // Self collision
+      if (snake.some(s => s[0] === head[0] && s[1] === head[1])) {
+        endGame(); return;
+      }
+
+      snake.unshift(head);
+
+      if (head[0] === food[0] && head[1] === food[1]) {
+        score += 10;
+        scoreEl.textContent = `得分: ${score}`;
+        placeFood();
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function endGame() {
+      gameOver = true;
+      clearInterval(timer);
+      message.textContent = `💀 游戏结束！得分: ${score}`;
+      draw();
+    }
+
+    function draw() {
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i <= COLS; i++) {
+        ctx.beginPath(); ctx.moveTo(i * GRID, 0); ctx.lineTo(i * GRID, canvas.height); ctx.stroke();
+      }
+      for (let i = 0; i <= ROWS; i++) {
+        ctx.beginPath(); ctx.moveTo(0, i * GRID); ctx.lineTo(canvas.width, i * GRID); ctx.stroke();
+      }
+
+      // Food
+      ctx.font = `${GRID - 2}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🍎', food[1] * GRID + GRID / 2, food[0] * GRID + GRID / 2);
+
+      // Snake
+      for (let i = 0; i < snake.length; i++) {
+        const [r, c] = snake[i];
+        const ratio = 1 - i / snake.length * 0.5;
+        if (i === 0) {
+          ctx.fillStyle = '#4ade80';
+          ctx.shadowColor = '#4ade80';
+          ctx.shadowBlur = 8;
+        } else {
+          ctx.fillStyle = `rgba(74, 222, 128, ${ratio})`;
+          ctx.shadowBlur = 0;
+        }
+        ctx.beginPath();
+        ctx.roundRect(c * GRID + 1, r * GRID + 1, GRID - 2, GRID - 2, 4);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+        ctx.font = '16px sans-serif';
+        ctx.fillText(`得分: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
+      }
+
+      if (paused && !gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('已暂停', canvas.width / 2, canvas.height / 2);
+      }
+    }
+
+    function setDir(dx, dy) {
+      // Prevent reversing
+      if (dir[0] === -dx && dir[1] === -dy) return;
+      nextDir = [dx, dy];
+    }
+
+    function togglePause() {
+      if (gameOver) return;
+      paused = !paused;
+    }
+
+    document.addEventListener('keydown', function(e) {
+      switch (e.key) {
+        case 'ArrowUp': case 'w': case 'W': setDir(0, -1); e.preventDefault(); break;
+        case 'ArrowDown': case 's': case 'S': setDir(0, 1); e.preventDefault(); break;
+        case 'ArrowLeft': case 'a': case 'A': setDir(-1, 0); e.preventDefault(); break;
+        case 'ArrowRight': case 'd': case 'D': setDir(1, 0); e.preventDefault(); break;
+        case ' ': togglePause(); e.preventDefault(); break;
+      }
+    });
+
+    // Swipe support
+    let touchStart = null;
+    canvas.addEventListener('touchstart', function(e) {
+      touchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+    });
+    canvas.addEventListener('touchend', function(e) {
+      if (!touchStart) return;
+      const dx = e.changedTouches[0].clientX - touchStart.x;
+      const dy = e.changedTouches[0].clientY - touchStart.y;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        setDir(dx > 0 ? 1 : -1, 0);
+      } else {
+        setDir(0, dy > 0 ? 1 : -1);
+      }
+      touchStart = null;
+    });
+
+    resetGame();
+  </script>
+</body>
+</html>

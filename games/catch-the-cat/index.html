@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>抓住猫咪</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: #fff;
+      padding: 10px;
+    }
+    h1 { margin-bottom: 8px; font-size: 22px; }
+    #info { margin-bottom: 12px; font-size: 13px; opacity: 0.85; }
+    canvas {
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      cursor: pointer;
+      max-width: 100%;
+    }
+    #controls { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
+    button {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    button:hover { background: rgba(255,255,255,0.4); }
+    #message {
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      min-height: 25px;
+    }
+    #score { font-size: 13px; opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <h1>🐱 抓住猫咪</h1>
+  <div id="info">点击空格放置障碍，围住猫咪不让它逃到边缘！</div>
+  <canvas id="game"></canvas>
+  <div id="controls">
+    <button onclick="resetGame()">🔄 重新开始</button>
+    <span id="score"></span>
+  </div>
+  <div id="message"></div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const message = document.getElementById('message');
+    const scoreEl = document.getElementById('score');
+
+    const ROWS = 11;
+    const COLS = 11;
+    const HEX_SIZE = 26;
+    const HEX_H = HEX_SIZE * 2;
+    const HEX_W = Math.sqrt(3) * HEX_SIZE;
+    const PAD = 30;
+
+    canvas.width = Math.ceil(COLS * HEX_W + PAD * 2 + HEX_W / 2);
+    canvas.height = Math.ceil(ROWS * HEX_H * 0.75 + PAD * 2 + HEX_SIZE * 0.25);
+
+    let board, catPos, gameOver, gameWon, moveCount;
+
+    // Odd-r offset hex grid: neighbors differ based on row parity
+    // Even row (r%2==0): neighbors are (-1,-1),(-1,0),(0,-1),(0,1),(1,-1),(1,0)
+    // Odd  row (r%2==1): neighbors are (-1,0),(-1,1),(0,-1),(0,1),(1,0),(1,1)
+    const NEIGHBORS_EVEN = [[-1,-1],[-1,0],[0,-1],[0,1],[1,-1],[1,0]];
+    const NEIGHBORS_ODD  = [[-1,0],[-1,1],[0,-1],[0,1],[1,0],[1,1]];
+
+    function getNeighbors(r, c) {
+      const dirs = (r % 2 === 0) ? NEIGHBORS_EVEN : NEIGHBORS_ODD;
+      const result = [];
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr, nc = c + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+          result.push([nr, nc]);
+        }
+      }
+      return result;
+    }
+
+    function isEdge(r, c) {
+      return r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1;
+    }
+
+    function hexCenter(r, c) {
+      const x = c * HEX_W + (r % 2 ? HEX_W / 2 : 0) + HEX_SIZE + PAD;
+      const y = r * HEX_H * 0.75 + HEX_SIZE + PAD;
+      return [x, y];
+    }
+
+    function drawHex(cx, cy, size, fill, stroke) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 3 * i - Math.PI / 6;
+        const x = cx + size * Math.cos(angle);
+        const y = cy + size * Math.sin(angle);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#f0f4f8';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const [x, y] = hexCenter(r, c);
+          if (board[r][c] === 1) {
+            drawHex(x, y, HEX_SIZE - 2, '#4a5568', '#2d3748');
+          } else if (r === catPos[0] && c === catPos[1]) {
+            drawHex(x, y, HEX_SIZE - 2, '#fef3c7', '#f59e0b');
+            ctx.font = `${HEX_SIZE + 4}px serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🐱', x, y + 2);
+          } else if (isEdge(r, c)) {
+            drawHex(x, y, HEX_SIZE - 2, '#e2e8f0', '#cbd5e0');
+          } else {
+            drawHex(x, y, HEX_SIZE - 2, '#ffffff', '#e2e8f0');
+          }
+        }
+      }
+    }
+
+    function getHexAt(px, py) {
+      let best = null, bestDist = Infinity;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const [x, y] = hexCenter(r, c);
+          const d = Math.hypot(px - x, py - y);
+          if (d < HEX_SIZE && d < bestDist) {
+            bestDist = d;
+            best = [r, c];
+          }
+        }
+      }
+      return best;
+    }
+
+    // BFS: can cat reach any edge cell?
+    function canEscape() {
+      const visited = new Set();
+      const queue = [catPos];
+      visited.add(catPos[0] * COLS + catPos[1]);
+
+      while (queue.length > 0) {
+        const [r, c] = queue.shift();
+        if (isEdge(r, c)) return true;
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          const key = nr * COLS + nc;
+          if (!visited.has(key) && board[nr][nc] === 0) {
+            visited.add(key);
+            queue.push([nr, nc]);
+          }
+        }
+      }
+      return false;
+    }
+
+    // BFS: shortest distance from cat to any edge
+    function distToEdge() {
+      const visited = new Set();
+      const queue = [[catPos[0], catPos[1], 0]];
+      visited.add(catPos[0] * COLS + catPos[1]);
+
+      while (queue.length > 0) {
+        const [r, c, d] = queue.shift();
+        if (isEdge(r, c)) return d;
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          const key = nr * COLS + nc;
+          if (!visited.has(key) && board[nr][nc] === 0) {
+            visited.add(key);
+            queue.push([nr, nc, d + 1]);
+          }
+        }
+      }
+      return Infinity; // trapped
+    }
+
+    function moveCat() {
+      const neighbors = getNeighbors(catPos[0], catPos[1]);
+      let bestMove = null;
+      let bestDist = Infinity;
+
+      for (const [nr, nc] of neighbors) {
+        if (board[nr][nc] === 0) {
+          // Temporarily move cat there and check distance
+          const oldPos = catPos;
+          catPos = [nr, nc];
+          const d = distToEdge();
+          catPos = oldPos;
+
+          if (d < bestDist || (d === bestDist && Math.random() < 0.3)) {
+            bestDist = d;
+            bestMove = [nr, nc];
+          }
+        }
+      }
+
+      if (bestMove) {
+        catPos = bestMove;
+      }
+    }
+
+    function handleClick(e) {
+      if (gameOver) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const px = (e.clientX - rect.left) * scaleX;
+      const py = (e.clientY - rect.top) * scaleY;
+      const hex = getHexAt(px, py);
+
+      if (!hex) return;
+      const [r, c] = hex;
+      if (board[r][c] === 1) return;
+      if (r === catPos[0] && c === catPos[1]) return;
+
+      board[r][c] = 1;
+      moveCount++;
+      scoreEl.textContent = `步数: ${moveCount}`;
+
+      if (!canEscape()) {
+        gameOver = true;
+        gameWon = true;
+        message.textContent = '🎉 恭喜你抓住了猫咪！';
+        draw();
+        return;
+      }
+
+      moveCat();
+
+      if (isEdge(catPos[0], catPos[1])) {
+        gameOver = true;
+        gameWon = false;
+        message.textContent = '😿 猫咪逃走了！再试一次吧！';
+      }
+
+      draw();
+    }
+
+    function resetGame() {
+      catPos = [Math.floor(ROWS / 2), Math.floor(COLS / 2)];
+      board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+      gameOver = false;
+      gameWon = false;
+      moveCount = 0;
+      message.textContent = '';
+      scoreEl.textContent = '步数: 0';
+
+      // Place random obstacles (not near center)
+      let placed = 0;
+      while (placed < 12) {
+        const r = Math.floor(Math.random() * ROWS);
+        const c = Math.floor(Math.random() * COLS);
+        const dist = Math.abs(r - catPos[0]) + Math.abs(c - catPos[1]);
+        if (board[r][c] === 0 && dist > 2 && !(r === catPos[0] && c === catPos[1])) {
+          board[r][c] = 1;
+          placed++;
+        }
+      }
+
+      draw();
+    }
+
+    canvas.addEventListener('click', handleClick);
+    canvas.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      handleClick({clientX: touch.clientX, clientY: touch.clientY});
+    });
+    resetGame();
+  </script>
+</body>
+</html>
