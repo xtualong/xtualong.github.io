@@ -12,30 +12,47 @@
         var headerIsFixed = document.body.getAttribute('data-header-desktop') !== 'normal';
         var TOP_SPACING = 20 + (headerIsFixed ? headerHeight : 0);
 
-        var rect = page.getBoundingClientRect();
-        tocAuto.style.left = (rect.left + rect.width + 20) + 'px';
-        tocAuto.style.maxWidth = (rect.left - 20) + 'px';
+        // Use getBoundingClientRect + scrollTop for absolute document positions
+        // (offsetTop is relative to offsetParent, which may not be the document)
+        var scrollNow = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+
+        var pageRect = page.getBoundingClientRect();
+        var pageTopAbs = pageRect.top + scrollNow;
+        tocAuto.style.left = (pageRect.left + pageRect.width + 20) + 'px';
+        tocAuto.style.maxWidth = (pageRect.left - 20) + 'px';
         tocAuto.style.visibility = 'visible';
+        // Set initial position
+        tocAuto.style.position = 'absolute';
+        tocAuto.style.top = pageTopAbs + 'px';
 
         var tocLinkElements = tocCore.querySelectorAll('a:first-child');
         var headerLinkElements = document.getElementsByClassName('headerLink');
         var tocLiElements = tocCore.getElementsByTagName('li');
-        var minTocTop = tocAuto.offsetTop;
-        var minScrollTop = minTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
+
+        // Absolute document position where TOC should start
+        var minTocTop = pageTopAbs;
+        var minScrollTop = minTocTop - TOP_SPACING;
 
         function onScroll() {
             var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-            var footerTop = postFooter.offsetTop;
-            var maxTocTop = footerTop - tocAuto.getBoundingClientRect().height;
-            var maxScrollTop = maxTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
+
+            // Recalculate footer position each scroll (it can shift with lazy images etc.)
+            var footerRect = postFooter.getBoundingClientRect();
+            var footerTopAbs = footerRect.top + scrollTop;
+            var tocHeight = tocAuto.getBoundingClientRect().height;
+            var maxTocTop = footerTopAbs - tocHeight;
+            var maxScrollTop = maxTocTop - TOP_SPACING;
 
             if (scrollTop < minScrollTop) {
+                // Above the article: pin at article top
                 tocAuto.style.position = 'absolute';
                 tocAuto.style.top = minTocTop + 'px';
             } else if (scrollTop > maxScrollTop) {
+                // Past the footer: pin above footer
                 tocAuto.style.position = 'absolute';
                 tocAuto.style.top = maxTocTop + 'px';
             } else {
+                // In between: float with viewport
                 tocAuto.style.position = 'fixed';
                 tocAuto.style.top = TOP_SPACING + 'px';
             }
