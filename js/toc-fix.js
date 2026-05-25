@@ -1,5 +1,4 @@
 // Fix: TOC scroll tracking with bounds-safe active link highlighting
-// Moves TOC outside backdrop-filter wrapper so position:fixed works relative to viewport
 (function() {
     function patchToc() {
         var tocAuto = document.getElementById('toc-auto');
@@ -8,41 +7,27 @@
         var postFooter = document.getElementById('post-footer');
         if (!tocAuto || !tocCore || !page || !postFooter) return;
 
-        // Move TOC outside .wrapper to body level so backdrop-filter doesn't break fixed positioning
-        var wrapper = document.getElementsByClassName('wrapper')[0];
-        if (wrapper && tocAuto.parentElement !== document.body) {
-            wrapper.parentNode.insertBefore(tocAuto, wrapper);
-        }
-
         var headerDesktop = document.getElementById('header-desktop');
         var headerHeight = headerDesktop ? headerDesktop.offsetHeight : 0;
         var headerIsFixed = document.body.getAttribute('data-header-desktop') !== 'normal';
         var TOP_SPACING = 20 + (headerIsFixed ? headerHeight : 0);
 
         var rect = page.getBoundingClientRect();
-        var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-        var pageTop = rect.top + scrollTop;
         tocAuto.style.left = (rect.left + rect.width + 20) + 'px';
         tocAuto.style.maxWidth = (rect.left - 20) + 'px';
         tocAuto.style.visibility = 'visible';
-        tocAuto.style.position = 'absolute';
-        tocAuto.style.top = pageTop + 'px';
 
         var tocLinkElements = tocCore.querySelectorAll('a:first-child');
         var headerLinkElements = document.getElementsByClassName('headerLink');
         var tocLiElements = tocCore.getElementsByTagName('li');
-
-        // minTocTop = absolute top of the page article (where TOC should start)
-        var minTocTop = pageTop;
-        var minScrollTop = minTocTop - TOP_SPACING;
+        var minTocTop = tocAuto.offsetTop;
+        var minScrollTop = minTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
 
         function onScroll() {
             var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-            var footerRect = postFooter.getBoundingClientRect();
-            var footerTop = footerRect.top + scrollTop;
-            var tocHeight = tocAuto.getBoundingClientRect().height;
-            var maxTocTop = footerTop - tocHeight;
-            var maxScrollTop = maxTocTop - TOP_SPACING;
+            var footerTop = postFooter.offsetTop;
+            var maxTocTop = footerTop - tocAuto.getBoundingClientRect().height;
+            var maxScrollTop = maxTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
 
             if (scrollTop < minScrollTop) {
                 tocAuto.style.position = 'absolute';
