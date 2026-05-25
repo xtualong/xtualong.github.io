@@ -1,0 +1,10 @@
+{
+  "name": "xtualong 的博客",
+  "short_name": "xtualong",
+  "description": "分享技术与生活的个人博客",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#58a6ff",
+  "icons": []
+}
