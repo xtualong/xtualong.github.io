@@ -85,7 +85,7 @@
     canvas.width = GRID * COLS;
     canvas.height = GRID * ROWS;
 
-    let snake, dir, nextDir, food, score, gameOver, paused, timer;
+    let snake, dir, nextDir, food, score, gameOver, paused, started, timer;
 
     function resetGame() {
       snake = [[10, 10], [10, 11], [10, 12]];
@@ -94,11 +94,11 @@
       score = 0;
       gameOver = false;
       paused = false;
-      message.textContent = '';
+      started = false;
+      message.textContent = '按方向键开始游戏';
       scoreEl.textContent = '得分: 0';
       placeFood();
       if (timer) clearInterval(timer);
-      timer = setInterval(tick, 120);
       draw();
     }
 
@@ -202,9 +202,24 @@
         ctx.textAlign = 'center';
         ctx.fillText('已暂停', canvas.width / 2, canvas.height / 2);
       }
+
+      if (!started && !gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('按方向键开始', canvas.width / 2, canvas.height / 2);
+      }
     }
 
     function setDir(dx, dy) {
+      // Start game on first direction input
+      if (!started && !gameOver) {
+        started = true;
+        message.textContent = '';
+        timer = setInterval(tick, 120);
+      }
       // Prevent reversing
       if (dir[0] === -dx && dir[1] === -dy) return;
       nextDir = [dx, dy];
