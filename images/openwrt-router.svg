@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="50%" stop-color="#161b22"/>
+      <stop offset="100%" stop-color="#1c2333"/>
+    </linearGradient>
+    <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#58a6ff" stroke-width="0.3" opacity="0.12"/>
+    </pattern>
+    <linearGradient id="accent2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#58a6ff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="360" fill="url(#bg2)"/>
+  <rect width="1200" height="360" fill="url(#grid2)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="150" cy="100" r="200" fill="#58a6ff" opacity="0.02"/>
+  <circle cx="1050" cy="280" r="150" fill="#58a6ff" opacity="0.03"/>
+
+  <!-- Accent line at top -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accent2)"/>
+
+  <!-- Router Icon (simplified) -->
+  <g transform="translate(100, 65)" filter="url(#glow2)">
+    <!-- Router body -->
+    <rect x="10" y="80" width="160" height="55" rx="8" fill="none" stroke="#58a6ff" stroke-width="2.5" opacity="0.85"/>
+    <!-- Router top slope -->
+    <path d="M10,80 L30,55 L150,55 L170,80" fill="none" stroke="#58a6ff" stroke-width="2.5" opacity="0.85"/>
+    <!-- Antenna left -->
+    <line x1="55" y1="55" x2="40" y2="15" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="40" cy="12" r="4" fill="#58a6ff" opacity="0.7"/>
+    <!-- Antenna right -->
+    <line x1="125" y1="55" x2="140" y2="15" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="140" cy="12" r="4" fill="#58a6ff" opacity="0.7"/>
+    <!-- LED indicators -->
+    <circle cx="40" cy="100" r="3" fill="#58a6ff" opacity="0.9"/>
+    <circle cx="55" cy="100" r="3" fill="#58a6ff" opacity="0.6"/>
+    <circle cx="70" cy="100" r="3" fill="#58a6ff" opacity="0.9"/>
+    <circle cx="85" cy="100" r="3" fill="#58a6ff" opacity="0.6"/>
+    <!-- Ethernet ports -->
+    <rect x="30" y="118" width="14" height="10" rx="1" fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
+    <rect x="50" y="118" width="14" height="10" rx="1" fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
+    <rect x="70" y="118" width="14" height="10" rx="1" fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
+    <rect x="90" y="118" width="14" height="10" rx="1" fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
+  </g>
+
+  <!-- WiFi Symbol -->
+  <g transform="translate(900, 55)" filter="url(#glow2)">
+    <!-- WiFi arcs -->
+    <path d="M60,120 Q60,100 80,90" fill="none" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <path d="M60,120 Q60,90 95,75" fill="none" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M60,120 Q60,80 110,60" fill="none" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M60,120 Q60,70 125,45" fill="none" stroke="#58a6ff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+    <!-- WiFi dot -->
+    <circle cx="60" cy="125" r="6" fill="#58a6ff" opacity="0.9"/>
+
+    <!-- Signal waves right side -->
+    <path d="M140,100 Q155,90 155,75" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+    <path d="M150,105 Q170,90 170,70" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  </g>
+
+  <!-- Connection lines from router to WiFi -->
+  <line x1="290" y1="150" x2="420" y2="150" stroke="#58a6ff" stroke-width="1" stroke-dasharray="8,5" opacity="0.2"/>
+  <line x1="780" y1="150" x2="890" y2="150" stroke="#58a6ff" stroke-width="1" stroke-dasharray="8,5" opacity="0.2"/>
+
+  <!-- Floating particles -->
+  <circle cx="400" cy="100" r="2" fill="#58a6ff" opacity="0.4"/>
+  <circle cx="500" cy="200" r="3" fill="#58a6ff" opacity="0.3"/>
+  <circle cx="600" cy="90" r="2" fill="#58a6ff" opacity="0.4"/>
+  <circle cx="700" cy="220" r="2.5" fill="#58a6ff" opacity="0.35"/>
+  <circle cx="800" cy="120" r="2" fill="#58a6ff" opacity="0.4"/>
+
+  <!-- Small network nodes -->
+  <g opacity="0.3">
+    <circle cx="420" cy="120" r="4" fill="none" stroke="#58a6ff" stroke-width="1"/>
+    <circle cx="520" cy="180" r="4" fill="none" stroke="#58a6ff" stroke-width="1"/>
+    <circle cx="680" cy="100" r="4" fill="none" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="424" y1="122" x2="516" y2="178" stroke="#58a6ff" stroke-width="0.8"/>
+    <line x1="524" y1="178" x2="676" y2="102" stroke="#58a6ff" stroke-width="0.8"/>
+  </g>
+
+  <!-- Main Title Text -->
+  <text x="600" y="180" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="2">
+    Xiaomi Router + OpenWrt
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="225" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" fill="#58a6ff" opacity="0.85" letter-spacing="4">
+    NETWORK FIRMWARE UPGRADE
+  </text>
+
+  <!-- Decorative line under text -->
+  <line x1="370" y1="248" x2="830" y2="248" stroke="#58a6ff" stroke-width="1" opacity="0.3"/>
+
+  <!-- Corner diamonds -->
+  <rect x="365" y="245" width="6" height="6" fill="#58a6ff" opacity="0.6" transform="rotate(45,368,248)"/>
+  <rect x="827" y="245" width="6" height="6" fill="#58a6ff" opacity="0.6" transform="rotate(45,830,248)"/>
+
+  <!-- Bottom accent dots -->
+  <circle cx="530" cy="310" r="2" fill="#58a6ff" opacity="0.3"/>
+  <circle cx="570" cy="320" r="1.5" fill="#58a6ff" opacity="0.25"/>
+  <circle cx="630" cy="315" r="2" fill="#58a6ff" opacity="0.3"/>
+  <circle cx="670" cy="308" r="1.5" fill="#58a6ff" opacity="0.25"/>
+</svg>

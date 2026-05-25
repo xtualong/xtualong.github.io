@@ -1,5 +1,5 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>技术教程 - Category - xtualong 的博客</title><link>https://www.xtualong.cn/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/</link><description>技术教程 - Category - xtualong 的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 24 May 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://www.xtualong.cn/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" rel="self" type="application/rss+xml"/><item><title>Hermes Agent + Open WebUI Docker 部署指南</title><link>https://www.xtualong.cn/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</link><pubDate>Sun, 24 May 2026 10:00:00 +0800</pubDate><author>xtualong</author><guid>https://www.xtualong.cn/posts/hermes-agent-+-open-webui-docker-%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/images/docker-ai.jpg" referrerpolicy="no-referrer">
+                <img src="/images/docker-ai.svg" referrerpolicy="no-referrer">
             </div><h1 id="hermes-agent--open-webui-docker-部署指南">Hermes Agent + Open WebUI Docker 部署指南</h1>
 <blockquote>
 <p>基于 Docker Compose 一键部署 Hermes Agent 网关与 Open WebUI 聊天界面，
