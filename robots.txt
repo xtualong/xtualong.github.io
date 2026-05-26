@@ -1,0 +1,46 @@
+User-agent: *
+Allow: /
+Disallow: /images/
+Disallow: /js/
+Disallow: /css/
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: SISTRIX Crawler
+Disallow: /
+User-agent: sistrix
+Disallow: /
+
+User-agent: UptimeRobot/2.0
+Disallow: /
+
+User-agent: Ezooms Robot
+Disallow: /
+
+User-agent: Perl LWP
+Disallow: /
+
+User-agent: SurdotlyBot
+Disallow: /
+
+User-agent: ZoominfoBot
+Disallow: /
+
+Sitemap: https://www.xtualong.cn/sitemap.xml
