@@ -6,9 +6,9 @@
   <title>记忆翻牌</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
     body {
       background: linear-gradient(135deg, #6a11cb, #2575fc);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -16,6 +16,7 @@
       font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #fff;
       padding: 10px;
+      touch-action: manipulation;
     }
     h1 { margin-bottom: 6px; font-size: 22px; }
     #info { margin-bottom: 10px; font-size: 13px; opacity: 0.85; }
@@ -27,6 +28,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       width: min(90vw, 360px);
+      touch-action: manipulation;
     }
     .card {
       aspect-ratio: 1;
@@ -172,6 +174,8 @@
         }
       }
     }
+
+    document.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
 
     initGame();
   </script>

@@ -6,9 +6,9 @@
   <title>2048</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
     body {
       background: linear-gradient(135deg, #f7971e, #ffd200);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -16,6 +16,7 @@
       font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #776e65;
       padding: 10px;
+      touch-action: none;
     }
     h1 { margin-bottom: 6px; font-size: 28px; color: #776e65; }
     #info { margin-bottom: 10px; font-size: 13px; opacity: 0.7; }
@@ -238,9 +239,11 @@
     // Swipe support
     let touchStart = null;
     document.addEventListener('touchstart', function(e) {
+      e.preventDefault();
       touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    });
+    }, {passive: false});
     document.addEventListener('touchend', function(e) {
+      e.preventDefault();
       if (!touchStart) return;
       const dx = e.changedTouches[0].clientX - touchStart.x;
       const dy = e.changedTouches[0].clientY - touchStart.y;
@@ -251,7 +254,8 @@
         move(dy > 0 ? 'down' : 'up');
       }
       touchStart = null;
-    });
+    }, {passive: false});
+    document.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
 
     initGame();
   </script>

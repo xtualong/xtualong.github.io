@@ -6,9 +6,9 @@
   <title>贪吃蛇</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
     body {
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -16,6 +16,7 @@
       font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #fff;
       padding: 10px;
+      touch-action: none;
     }
     h1 { margin-bottom: 8px; font-size: 22px; }
     #info { margin-bottom: 10px; font-size: 13px; opacity: 0.8; }
@@ -23,6 +24,7 @@
       border-radius: 8px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       border: 2px solid rgba(255,255,255,0.15);
+      touch-action: none;
     }
     #controls { margin-top: 12px; display: flex; gap: 15px; align-items: center; }
     button {
@@ -243,9 +245,11 @@
     // Swipe support
     let touchStart = null;
     canvas.addEventListener('touchstart', function(e) {
+      e.preventDefault();
       touchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
-    });
+    }, {passive: false});
     canvas.addEventListener('touchend', function(e) {
+      e.preventDefault();
       if (!touchStart) return;
       const dx = e.changedTouches[0].clientX - touchStart.x;
       const dy = e.changedTouches[0].clientY - touchStart.y;
@@ -255,7 +259,8 @@
         setDir(0, dy > 0 ? 1 : -1);
       }
       touchStart = null;
-    });
+    }, {passive: false});
+    canvas.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
 
     resetGame();
   </script>
