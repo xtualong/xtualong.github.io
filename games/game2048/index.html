@@ -18,10 +18,10 @@
       padding: 10px;
       touch-action: none;
     }
-    h1 { margin-bottom: 6px; font-size: 28px; color: #776e65; }
-    #info { margin-bottom: 10px; font-size: 13px; opacity: 0.7; }
+    h1 { margin-bottom: 6px; font-size: 28px; color: #776e65; flex-shrink: 0; }
+    #info { margin-bottom: 10px; font-size: 13px; opacity: 0.7; flex-shrink: 0; }
     #score-bar {
-      display: flex; gap: 15px; align-items: center; margin-bottom: 10px;
+      display: flex; gap: 15px; align-items: center; margin-bottom: 10px; flex-shrink: 0;
     }
     .score-box {
       background: rgba(119, 110, 101, 0.15);
@@ -37,13 +37,12 @@
       background: rgba(119, 110, 101, 0.3);
       border-radius: 8px;
       padding: 8px;
-      width: min(90vw, 400px);
-      aspect-ratio: 1;
+      max-width: 400px;
+      flex-shrink: 0;
     }
     .cell {
       background: rgba(238, 228, 218, 0.35);
       border-radius: 6px;
-      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -51,7 +50,7 @@
       font-weight: bold;
       transition: all 0.12s ease;
     }
-    #controls { margin-top: 12px; display: flex; gap: 10px; }
+    #controls { margin-top: 12px; display: flex; gap: 10px; flex-shrink: 0; }
     button {
       background: rgba(119, 110, 101, 0.6);
       border: none; color: #fff;
@@ -59,8 +58,8 @@
       cursor: pointer; font-size: 14px; transition: all 0.2s;
     }
     button:hover { background: rgba(119, 110, 101, 0.85); }
-    #message { margin-top: 10px; font-size: 16px; font-weight: bold; min-height: 22px; }
-    .mobile-controls { display: none; margin-top: 12px; gap: 4px; }
+    #message { margin-top: 10px; font-size: 16px; font-weight: bold; min-height: 22px; flex-shrink: 0; }
+    .mobile-controls { display: none; margin-top: 12px; gap: 4px; flex-shrink: 0; }
     .mobile-controls button {
       width: 60px; height: 60px; font-size: 24px; padding: 0;
       display: flex; align-items: center; justify-content: center; border-radius: 12px;
@@ -259,7 +258,46 @@
     }, {passive: false});
     document.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
 
+    function resizeBoard() {
+      const body = document.body;
+      const cs = getComputedStyle(body);
+      const padH = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const availW = body.clientWidth - padH;
+
+      // Temporarily hide board to measure true available height
+      const origDisplay = boardEl.style.display;
+      boardEl.style.display = 'none';
+
+      const h1 = document.querySelector('h1');
+      const info = document.getElementById('info');
+      const scoreBar = document.getElementById('score-bar');
+      const controls = document.getElementById('controls');
+      const msg = document.getElementById('message');
+      const mobile = document.querySelector('.mobile-controls');
+
+      let usedH = 0;
+      [h1, info, scoreBar, controls, msg].forEach(el => {
+        if (el) {
+          const s = getComputedStyle(el);
+          usedH += el.offsetHeight + parseFloat(s.marginTop) + parseFloat(s.marginBottom);
+        }
+      });
+      if (mobile && getComputedStyle(mobile).display !== 'none') {
+        usedH += mobile.offsetHeight + parseFloat(getComputedStyle(mobile).marginTop);
+      }
+
+      boardEl.style.display = origDisplay;
+
+      const availH = body.clientHeight - padV - usedH;
+      const size = Math.min(availW, availH, 400);
+      boardEl.style.width = size + 'px';
+      boardEl.style.height = size + 'px';
+    }
+
     initGame();
+    resizeBoard();
+    window.addEventListener('resize', resizeBoard);
   </script>
 </body>
 </html>
