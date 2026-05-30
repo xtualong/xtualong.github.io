@@ -37,7 +37,7 @@
       background: rgba(119, 110, 101, 0.3);
       border-radius: 8px;
       padding: 8px;
-      max-width: 400px;
+      max-width: 450px;
       flex-shrink: 0;
     }
     .cell {
@@ -237,13 +237,13 @@
       if (map[e.key]) { move(map[e.key]); e.preventDefault(); }
     });
 
-    // Swipe support
+    // Swipe support on board only
     let touchStart = null;
-    document.addEventListener('touchstart', function(e) {
+    boardEl.addEventListener('touchstart', function(e) {
       e.preventDefault();
       touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }, {passive: false});
-    document.addEventListener('touchend', function(e) {
+    boardEl.addEventListener('touchend', function(e) {
       e.preventDefault();
       if (!touchStart) return;
       const dx = e.changedTouches[0].clientX - touchStart.x;
@@ -256,7 +256,7 @@
       }
       touchStart = null;
     }, {passive: false});
-    document.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
+    boardEl.addEventListener('touchmove', function(e) { e.preventDefault(); }, {passive: false});
 
     function resizeBoard() {
       const body = document.body;
@@ -290,7 +290,7 @@
       boardEl.style.display = origDisplay;
 
       const availH = body.clientHeight - padV - usedH;
-      const size = Math.min(availW, availH, 400);
+      const size = Math.min(availW, availH, 450);
       boardEl.style.width = size + 'px';
       boardEl.style.height = size + 'px';
     }
