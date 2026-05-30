@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d1b4e"/>
+      <stop offset="50%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e95420" stroke-width="0.3" opacity="0.1"/>
+    </pattern>
+    <linearGradient id="accent2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e95420" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#e95420" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#e95420" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vmwaregrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6cc342"/>
+      <stop offset="100%" stop-color="#4a9e2a"/>
+    </linearGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="360" fill="url(#bg2)"/>
+  <rect width="1200" height="360" fill="url(#grid2)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1000" cy="80" r="200" fill="#e95420" opacity="0.03"/>
+  <circle cx="200" cy="300" r="160" fill="#e95420" opacity="0.025"/>
+
+  <!-- Accent line at top -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accent2)"/>
+
+  <!-- VMware ESXi Logo (VM cube) -->
+  <g transform="translate(65, 40)" filter="url(#glow2)">
+    <!-- VM cube - 3D isometric cube -->
+    <path d="M80,20 L140,50 L80,80 L20,50 Z" fill="none" stroke="#6cc342" stroke-width="2.5" opacity="0.9"/>
+    <path d="M20,50 L80,80 L80,140 L20,110 Z" fill="none" stroke="#6cc342" stroke-width="2.5" opacity="0.7"/>
+    <path d="M80,80 L140,50 L140,110 L80,140 Z" fill="none" stroke="#6cc342" stroke-width="2.5" opacity="0.8"/>
+    <!-- VM text -->
+    <text x="80" y="105" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="#6cc342" opacity="0.9">VM</text>
+    <!-- ESXi label -->
+    <text x="80" y="175" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="600" fill="#6cc342" opacity="0.7" letter-spacing="3">ESXi</text>
+  </g>
+
+  <!-- Ubuntu 24 Noble Numbat Symbol -->
+  <g transform="translate(880, 35)" filter="url(#glow2)">
+    <!-- Ubuntu Circle of Friends -->
+    <circle cx="80" cy="75" r="60" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.75"/>
+    <!-- Three friend figures -->
+    <circle cx="80" cy="25" r="11" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.85"/>
+    <path d="M80,36 Q80,52 70,60" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M80,36 Q80,52 90,60" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="42" cy="108" r="11" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.85"/>
+    <path d="M42,97 Q42,81 52,73" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M42,97 Q42,81 32,73" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="118" cy="108" r="11" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.85"/>
+    <path d="M118,97 Q118,81 108,73" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M118,97 Q118,81 128,73" fill="none" stroke="#e95420" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <!-- Connecting arcs -->
+    <path d="M68,33 Q35,48 38,68" fill="none" stroke="#e95420" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+    <path d="M92,33 Q125,48 122,68" fill="none" stroke="#e95420" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+    <path d="M53,98 Q80,120 107,98" fill="none" stroke="#e95420" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+    <!-- Noble Numbat text -->
+    <text x="80" y="152" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="600" fill="#e95420" opacity="0.7" letter-spacing="1">Noble Numbat</text>
+    <!-- 24.04 badge -->
+    <rect x="45" y="162" width="70" height="22" rx="4" fill="none" stroke="#e95420" stroke-width="1.5" opacity="0.6"/>
+    <text x="80" y="178" text-anchor="middle" font-family="monospace" font-size="13" fill="#e95420" opacity="0.8">24.04</text>
+  </g>
+
+  <!-- Broken Chain / Dependency Icon (center-left) -->
+  <g transform="translate(300, 55)" filter="url(#glow2)">
+    <!-- Chain link 1 -->
+    <path d="M20,50 Q20,25 45,25 Q70,25 70,50 Q70,75 45,75 Q20,75 20,50" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.8"/>
+    <!-- Break in chain -->
+    <line x1="60" y1="68" x2="78" y2="86" stroke="#2d1b4e" stroke-width="5"/>
+    <!-- Chain link 2 -->
+    <path d="M70,85 Q70,60 95,60 Q120,60 120,85 Q120,110 95,110 Q70,110 70,85" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.8"/>
+    <!-- Break sparks -->
+    <line x1="66" y1="76" x2="56" y2="66" stroke="#e95420" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="72" y1="80" x2="62" y2="90" stroke="#e95420" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="80" y1="73" x2="90" y2="63" stroke="#e95420" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <!-- Version labels -->
+    <text x="45" y="55" text-anchor="middle" font-family="monospace" font-size="11" fill="#e95420" opacity="0.7">8.5.0</text>
+    <text x="95" y="90" text-anchor="middle" font-family="monospace" font-size="11" fill="#e95420" opacity="0.7">1.40</text>
+    <!-- X marks incompatibility -->
+    <g transform="translate(55, 40)" opacity="0.6">
+      <line x1="0" y1="0" x2="10" y2="10" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/>
+      <line x1="10" y1="0" x2="0" y2="10" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Package / .deb Icon (center-right) -->
+  <g transform="translate(660, 50)" filter="url(#glow2)">
+    <!-- Package box -->
+    <rect x="10" y="25" width="120" height="95" rx="6" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.8"/>
+    <!-- Box flap -->
+    <path d="M10,45 L70,15 L130,45" fill="none" stroke="#e95420" stroke-width="2.5" opacity="0.7"/>
+    <!-- Center seam -->
+    <line x1="70" y1="45" x2="70" y2="120" stroke="#e95420" stroke-width="1.5" opacity="0.35"/>
+    <!-- Cross tape -->
+    <line x1="10" y1="75" x2="130" y2="75" stroke="#e95420" stroke-width="1.5" opacity="0.35"/>
+    <!-- .deb text -->
+    <text x="70" y="95" text-anchor="middle" font-family="monospace" font-size="20" font-weight="bold" fill="#e95420" opacity="0.9">.deb</text>
+    <!-- Version badge -->
+    <rect x="20" y="135" width="100" height="22" rx="4" fill="none" stroke="#58a6ff" stroke-width="1.5" opacity="0.6"/>
+    <text x="70" y="151" text-anchor="middle" font-family="monospace" font-size="13" fill="#58a6ff" opacity="0.8">>= 1.59.0</text>
+    <!-- Check mark -->
+    <circle cx="110" cy="30" r="10" fill="none" stroke="#6cc342" stroke-width="2" opacity="0.7"/>
+    <path d="M104,30 L108,34 L116,26" fill="none" stroke="#6cc342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  </g>
+
+  <!-- Connection dots / particles -->
+  <circle cx="310" cy="185" r="3" fill="#e95420" opacity="0.4"/>
+  <circle cx="400" cy="150" r="2" fill="#e95420" opacity="0.35"/>
+  <circle cx="480" cy="200" r="2.5" fill="#e95420" opacity="0.3"/>
+  <circle cx="560" cy="140" r="2" fill="#58a6ff" opacity="0.3"/>
+  <circle cx="640" cy="190" r="3" fill="#e95420" opacity="0.35"/>
+
+  <!-- Dashed connection lines -->
+  <line x1="260" y1="175" x2="400" y2="175" stroke="#e95420" stroke-width="1" stroke-dasharray="8,5" opacity="0.2"/>
+  <line x1="560" y1="175" x2="660" y2="175" stroke="#e95420" stroke-width="1" stroke-dasharray="8,5" opacity="0.2"/>
+
+  <!-- Arrow from broken chain to .deb package -->
+  <g opacity="0.3">
+    <line x1="450" y1="175" x2="540" y2="175" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <path d="M535,170 L545,175 L535,180" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Terminal hint -->
+  <g transform="translate(350, 285)" opacity="0.22">
+    <rect x="0" y="0" width="500" height="28" rx="4" fill="none" stroke="#e95420" stroke-width="1"/>
+    <text x="12" y="19" font-family="monospace" font-size="11" fill="#e95420">$ dpkg -i libnghttp2-14_1.59.0-1ubuntu0.3_amd64.deb</text>
+  </g>
+
+  <!-- Main Title Text -->
+  <text x="600" y="185" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="46" font-weight="700" fill="#ffffff" letter-spacing="2">
+    Ubuntu Library Dependency Fix
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="228" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#e95420" opacity="0.85" letter-spacing="4">
+    OFFLINE PACKAGE REPAIR
+  </text>
+
+  <!-- Decorative line under text -->
+  <line x1="320" y1="248" x2="880" y2="248" stroke="#e95420" stroke-width="1" opacity="0.3"/>
+
+  <!-- Corner diamonds -->
+  <rect x="315" y="245" width="6" height="6" fill="#e95420" opacity="0.6" transform="rotate(45,318,248)"/>
+  <rect x="877" y="245" width="6" height="6" fill="#e95420" opacity="0.6" transform="rotate(45,880,248)"/>
+
+  <!-- Bottom accent dots -->
+  <circle cx="450" cy="320" r="2" fill="#6cc342" opacity="0.3"/>
+  <circle cx="500" cy="330" r="1.5" fill="#e95420" opacity="0.25"/>
+  <circle cx="700" cy="325" r="2" fill="#e95420" opacity="0.3"/>
+  <circle cx="750" cy="315" r="1.5" fill="#58a6ff" opacity="0.25"/>
+</svg>
