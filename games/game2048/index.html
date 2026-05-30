@@ -32,16 +32,18 @@
     #board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
       gap: 8px;
       background: rgba(119, 110, 101, 0.3);
       border-radius: 8px;
       padding: 8px;
       width: min(90vw, 400px);
-      height: min(90vw, 400px);
+      aspect-ratio: 1;
     }
     .cell {
       background: rgba(238, 228, 218, 0.35);
       border-radius: 6px;
+      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
