@@ -132,7 +132,7 @@
     let snake, dir, nextDir, food, score, gameOver, paused, started, timer;
 
     function resetGame() {
-      snake = [[10, 10], [9, 10], [8, 10]];
+      snake = [[10, 12], [10, 11], [10, 10]];
       dir = [1, 0];
       nextDir = [1, 0];
       score = 0;
@@ -262,6 +262,10 @@
         timer = setInterval(tick, 180);
       }
       if (dir[0] === -dx && dir[1] === -dy) return;
+      // Check if moving in new direction would immediately hit body
+      const nr = snake[0][0] + dy;
+      const nc = snake[0][1] + dx;
+      if (snake.some(s => s[0] === nr && s[1] === nc)) return;
       nextDir = [dx, dy];
     }
 
