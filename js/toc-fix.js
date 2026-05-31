@@ -51,9 +51,9 @@
       var maxScrollTop = maxTocTop - TOP_SPACING;
 
       if (scrollTop < minScrollTop) {
-        // Above the article: pin at article top
-        tocAuto.style.position = "absolute";
-        tocAuto.style.top = minTocTop + "px";
+        // Above the article: float with viewport so TOC is always visible
+        tocAuto.style.position = "fixed";
+        tocAuto.style.top = TOP_SPACING + "px";
       } else if (scrollTop > maxScrollTop) {
         // Past the footer: pin above footer
         tocAuto.style.position = "absolute";
