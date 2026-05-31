@@ -32,14 +32,16 @@
     var headerLinkElements = document.getElementsByClassName("headerLink");
     var tocLiElements = tocCore.getElementsByTagName("li");
 
-    // Absolute document position where TOC should start
-    var minTocTop = pageTopAbs;
-    var minScrollTop = minTocTop - TOP_SPACING;
-
     function onScroll() {
       var scrollTop =
         (document.documentElement && document.documentElement.scrollTop) ||
         document.body.scrollTop;
+
+      // Recalculate page top each scroll (layout shifts from lazy images etc.)
+      var pageRectNow = page.getBoundingClientRect();
+      var pageTopAbsNow = pageRectNow.top + scrollTop;
+      var minTocTop = pageTopAbsNow;
+      var minScrollTop = minTocTop - TOP_SPACING;
 
       // Recalculate footer position each scroll (it can shift with lazy images etc.)
       var footerRect = postFooter.getBoundingClientRect();
