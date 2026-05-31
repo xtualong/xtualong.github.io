@@ -1,10 +1,18 @@
 // 鼠标点击特效 - 显示随机文字
-(function() {
-  const words = ['❤️', '✨', '🎉', '👍', '🌟', '💪', '🔥', '⭐', '🎵', '💫'];
+(function () {
+  const words = ["❤️", "✨", "🎉", "👍", "🌟", "💪", "🔥", "⭐", "🎵", "💫"];
+  let lastClickTime = 0;
 
-  document.addEventListener('click', function(e) {
+  document.addEventListener("click", function (e) {
+    // 跳过交互元素和节流
+    const now = Date.now();
+    if (now - lastClickTime < 150) return;
+    lastClickTime = now;
+    if (e.target.closest("button, a, input, textarea, select, .theme-switch"))
+      return;
+
     // 创建文字元素
-    const word = document.createElement('span');
+    const word = document.createElement("span");
     word.textContent = words[Math.floor(Math.random() * words.length)];
     word.style.cssText = `
       position: fixed;
@@ -26,7 +34,7 @@
   });
 
   // 添加动画样式
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     @keyframes clickWordFloat {
       0% {
