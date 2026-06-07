@@ -1,7 +1,14 @@
 # pt 命令一键安装脚本
 # 用法: irm https://www.xtualong.cn/scripts/install-pt.ps1 | iex
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 根据 PowerShell 版本设置编码
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $OutputEncoding = [System.Text.Encoding]::UTF8
+} else {
+    [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding(936)
+    $OutputEncoding = [System.Text.Encoding]::GetEncoding(936)
+}
 
 Write-Host ""
 Write-Host "正在安装 pt (Ping with Timestamp)..." -ForegroundColor Cyan
