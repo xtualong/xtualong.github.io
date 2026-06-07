@@ -1,5 +1,7 @@
 # pt 命令一键安装脚本
 # 用法: irm https://www.xtualong.cn/scripts/install-pt.ps1 | iex
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 Write-Host ""
 Write-Host "正在安装 pt (Ping with Timestamp)..." -ForegroundColor Cyan
