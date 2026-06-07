@@ -53,7 +53,8 @@ function pt {
                 Write-Host "ms`$(`$p[2])"
                 `$last = `$m
             } else { Write-Host "`$ts  `$l" }
-        } elseif (`$l -match "timed out|请求超时|无法访问目标主机|一般故障") { Write-Host "`$ts  `$l" -ForegroundColor Red; `$last = -1 }
+        } elseif (`$l -match "timed out|timed out|unreachable|General failure|Request timed out|Destination host") { Write-Host "`$ts  `$l" -ForegroundColor Red; `$last = -1 }
+        elseif (`$l -match "\d+ms" -and `$l -notmatch "TTL=") { Write-Host "`$ts  `$l" -ForegroundColor Red; `$last = -1 }
         else { Write-Host "`$ts  `$l" }
     }
 }
