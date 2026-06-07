@@ -27,6 +27,7 @@ if (!(Test-Path $PROFILE)) {
 Write-Host "[3/3] Writing pt function..." -ForegroundColor DarkGray
 
 $code = @'
+# pt - Ping with Timestamp
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
@@ -60,7 +61,15 @@ function pt {
 
 $existing = Get-Content $PROFILE -Raw -ErrorAction SilentlyContinue
 if ($existing -and $existing -match "function pt") {
-    Write-Host "  Already installed, skipping" -ForegroundColor Yellow
+    Write-Host "  pt already installed" -ForegroundColor Yellow
+    $r = Read-Host "  Replace? (Y/N)"
+    if ($r -eq 'Y' -or $r -eq 'y') {
+        $new = $existing -replace "(?s)# pt - Ping with Timestamp.*?^}", $code
+        Set-Content -Path $PROFILE -Value $new -Encoding UTF8
+        Write-Host "  Replaced" -ForegroundColor Green
+    } else {
+        Write-Host "  Skipped" -ForegroundColor DarkGray
+    }
 } else {
     Add-Content -Path $PROFILE -Value $code -Encoding UTF8
     Write-Host "  Done" -ForegroundColor Green
