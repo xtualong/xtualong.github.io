@@ -39,7 +39,16 @@ function pt {
     Write-Host ""
     Write-Host "Ping $Target，按 Ctrl+C 停止" -ForegroundColor DarkGray
     Write-Host ""
+    Write-Host -NoNewline "延迟 "
+    Write-Host -NoNewline "<10ms " -ForegroundColor Cyan
+    Write-Host -NoNewline "10-35ms " -ForegroundColor Green
+    Write-Host -NoNewline "36-80ms " -ForegroundColor Yellow
+    Write-Host -NoNewline "81-150ms " -ForegroundColor DarkYellow
+    Write-Host -NoNewline ">150ms " -ForegroundColor Red
+    Write-Host "| 抖动>5ms" -ForegroundColor Magenta
+    Write-Host ""
     & ping @a | ForEach-Object {
+        if ($_ -match '^\s*$') { return }
         $ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         $l = $_
         if ($l -match "TTL=") {
@@ -54,6 +63,7 @@ function pt {
                 $last = $m
             } else { Write-Host "$ts  $l" }
         } elseif ($l -match "timed out|请求超时|无法访问目标主机|一般故障|传输失败|目标.*不可达") { Write-Host "$ts  $l" -ForegroundColor Red; $last = -1 }
+        elseif ($l -match "\d+ms" -and $l -notmatch "TTL=") { Write-Host "$ts  $l" -ForegroundColor Red; $last = -1 }
         else { Write-Host "$ts  $l" }
     }
 }
