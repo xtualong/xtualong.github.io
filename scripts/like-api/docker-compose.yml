@@ -1,9 +1,0 @@
-services:
-  like-api:
-    build: .
-    container_name: like-api
-    restart: unless-stopped
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./data:/data
